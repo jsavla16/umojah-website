@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Fonts (self-hosted)                                                */
+/* ------------------------------------------------------------------ */
+
+@font-face {
+  font-family: "Nextrue Extended";
+  src: url("/fonts/Nextrue-Extended-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Nord";
+  src: url("/fonts/Nord-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Brand colours + font stacks                                        */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Maasai-inspired brand palette */
+  --color-bone: #f2ead0;
+  --color-sand: #e8d9a8;
+  --color-earth: #3a2a10;
+  --color-black: #000000;
+  --color-terracotta: #9b4e45;
+  --color-ochre: #a8341a;
+  --color-deepred: #8a190e;
+  --color-indigo: #2a5a8a;
+  --color-gold: #c99a3e;
+
+  /* Sampled from the Merchandising band in the Canva mockup. It sits
+     outside the nine brand colours in the build brief — the mockup's dark
+     section is a textured charcoal, noticeably lifted off pure black, and
+     --color-black rendered flat looked wrong against it. Flagged for
+     confirmation rather than hardcoded into the component. */
+  --color-charcoal: #383836;
+
+  /* Font stacks: custom font first, then Google-loaded Inter (400/700)
+     via next/font, then generic system fallback */
+  --font-display: "Nextrue Extended", var(--font-inter-google, sans-serif), sans-serif;
+  --font-heading: "Nord", var(--font-inter-google, sans-serif), sans-serif;
+
+  /* Google's Inter comes FIRST here deliberately. The self-hosted
+     Inter-Medium.ttf only declares weight 500, so when it led the stack the
+     browser matched it for regular (400) text too and rendered every
+     paragraph at medium — which read as "bolded", most visibly for light
+     copy on the dark and terracotta grounds. The Google face carries 400,
+     500 and 700, so weights resolve properly; the local file stays as a
+     fallback. The brief lists Inter as a Google Fonts load anyway. */
+  --font-body: var(--font-inter-google), "Inter", system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-bone);
+  color: var(--color-earth);
+  font-family: var(--font-body);
+}
+
+/* ------------------------------------------------------------------ */
+/* Aged paper texture                                                  */
+/* ------------------------------------------------------------------ */
+
+/* paper.png is a near-white grain tile generated to match the grain
+   measured off the Canva mockup's own paper background. It's applied as
+   a background-image blended with whatever background-color the element
+   already has, so one texture ages every section regardless of its
+   colour — bone, terracotta, earth. It sits behind content, so
+   illustrations and text stay crisp.
+
+   Usage: pair with a background colour, e.g.
+     <section className="paper bg-bone">   */
+.paper {
+  background-image: url("/images/textures/paper.png");
+  background-repeat: repeat;
+  background-size: 512px 512px;
+  background-blend-mode: multiply;
+}
