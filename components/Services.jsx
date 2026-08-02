@@ -4,6 +4,7 @@ import bassBins from "@/public/images/services/bass-bins-trim.png";
 import venue from "@/public/images/services/venue-trim.png";
 import { STAGE, s } from "@/lib/stage";
 
+
 // Home / 1.3 Services — "Feel the Vibrations".
 //
 // Measured off the Canva mockup (2732px page, Services band y 3072-4608).
@@ -45,6 +46,7 @@ const PANELS = [
     // visible area rather than in the panel box.
     centreOffset: 0.012,
     ctaRight: 0.022,
+    ctaHref: "#contact-hire",
     dark: false,
   },
   {
@@ -61,6 +63,7 @@ const PANELS = [
     imageBottom: 0.0095,
     centreOffset: 0,
     ctaRight: 0.0095,
+    ctaHref: "#contact-build",
     dark: true,
   },
   {
@@ -80,6 +83,7 @@ const PANELS = [
     centreOffset: 0,
     // clears the 2.71%-wide shuka border on the page edge
     ctaRight: 0.038,
+    ctaHref: "#contact-experience",
     dark: false,
   },
 ];
@@ -98,6 +102,7 @@ function Panel({ panel }) {
     imageBottom,
     centreOffset,
     ctaRight,
+    ctaHref,
     dark,
   } = panel;
   const ink = dark ? "text-bone" : "text-earth";
@@ -171,7 +176,7 @@ function Panel({ panel }) {
           style={{ top: s(0.2683), left: 0, right: s(ctaRight) }}
         >
           <a
-            href="#contact"
+            href={ctaHref}
             className={`font-display inline-flex items-center justify-center whitespace-nowrap rounded-md border-2 border-earth uppercase tracking-[0.08em] transition-colors ${
               dark
                 ? "bg-earth text-bone hover:bg-black"

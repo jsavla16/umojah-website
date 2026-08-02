@@ -1,5 +1,6 @@
 import ShukaBackground from "@/components/ShukaBackground";
 import ViewportBadge from "@/components/ViewportBadge";
+import Nav from "@/components/Nav";
 import SoundSystem from "@/components/SoundSystem";
 import Crew from "@/components/Crew";
 import Collaborations from "@/components/Collaborations";
@@ -14,6 +15,7 @@ export default function About() {
   return (
     <>
       <ShukaBackground />
+      <Nav />
       <main className="min-h-screen">
         <SoundSystem />
         <Crew />

@@ -4,6 +4,7 @@ import herbyStackz from "@/public/images/merch/herby-stackz-trim.png";
 import sticker from "@/public/images/merch/umojah-sticker-trim.png";
 import dubClubCap from "@/public/images/merch/nairobi-dub-club-cap-trim.png";
 import { STAGE, s } from "@/lib/stage";
+import { merchHref, linkProps } from "@/lib/links";
 
 // Home / 1.4 Merchandising — "Wear the Culture".
 //
@@ -36,7 +37,6 @@ const PRODUCTS = [
     imageTop: 0.1677,
     left: 0.0483,
     bg: "bg-bone",
-    href: "#",
   },
   {
     id: "herby-stackz",
@@ -47,7 +47,6 @@ const PRODUCTS = [
     imageTop: 0.1658,
     left: 0.2822,
     bg: "bg-terracotta",
-    href: "#",
   },
   {
     id: "sticker",
@@ -58,7 +57,6 @@ const PRODUCTS = [
     imageTop: 0.1969,
     left: 0.5066,
     bg: "bg-bone",
-    href: "#",
   },
   {
     id: "cap",
@@ -69,7 +67,6 @@ const PRODUCTS = [
     imageTop: 0.1863,
     left: 0.7372,
     bg: "bg-bone",
-    href: "#",
   },
 ];
 
@@ -100,11 +97,12 @@ function Rule({ left, width, flip }) {
 }
 
 function ProductCard({ product }) {
-  const { lines, image, alt, imageWidth, imageTop, left, bg, href } = product;
+  const { id, lines, image, alt, imageWidth, imageTop, left, bg } = product;
+  const { className: state, ...anchor } = linkProps(merchHref(id));
   return (
     <a
-      href={href}
-      className={`paper absolute block ${bg} transition-transform hover:-translate-y-1`}
+      {...anchor}
+      className={`paper absolute block ${bg} transition-transform hover:-translate-y-1 ${state ?? ""}`}
       style={{
         left: s(left),
         top: s(CARD.top),

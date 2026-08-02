@@ -4,6 +4,7 @@ import vinyl from "@/public/images/music/vinyl-trim.png";
 import smokeCloud from "@/public/images/music/smoke-cloud-trim.png";
 import arrowLeft from "@/public/images/music/arrow-left-trim.png";
 import { STAGE, s } from "@/lib/stage";
+import { STREAMING, linkProps } from "@/lib/links";
 
 // Home / 1.2 New Music & DJ Sets — "Groove to the Beat".
 //
@@ -52,17 +53,21 @@ const SMOKE_CENTRES = [0.2816, 0.8156];
 const BUTTON = { width: 0.1512, height: 0.0406 };
 
 const PLATFORMS = [
-  { name: "YouTube", filled: true, col: 0, row: 0 },
-  { name: "Bandcamp", filled: false, col: 1, row: 0 },
-  { name: "Spotify", filled: false, col: 0, row: 1 },
-  { name: "Apple Music", filled: true, col: 1, row: 1 },
+  { name: "YouTube", href: STREAMING.youtube, filled: true, col: 0, row: 0 },
+  { name: "Bandcamp", href: STREAMING.bandcamp, filled: false, col: 1, row: 0 },
+  { name: "Spotify", href: STREAMING.spotify, filled: false, col: 0, row: 1 },
+  { name: "Apple Music", href: STREAMING.appleMusic, filled: true, col: 1, row: 1 },
 ];
 
 const ROW_TOP = [0.3972, 0.4484, 0.5011];
 const COL_LEFT = [0.0798, 0.2672];
 
-function Pill({ children, href, filled, style }) {
-  const className = `font-display absolute flex items-center justify-center whitespace-nowrap rounded-full border-2 border-earth uppercase tracking-[0.1em] transition-colors ${filled
+// `submit` is explicit rather than inferred from a missing href: the
+// streaming links legitimately have no href until the client supplies
+// them, and inferring would have turned every unfilled platform pill into
+// a stray form submit button.
+function Pill({ children, href, filled, submit = false, style }) {
+  const base = `font-display absolute flex items-center justify-center whitespace-nowrap rounded-full border-2 border-earth uppercase tracking-[0.1em] transition-colors ${filled
     ? "bg-terracotta text-bone hover:bg-deepred"
     : "bg-bone text-earth hover:bg-sand"
     }`;
@@ -71,14 +76,20 @@ function Pill({ children, href, filled, style }) {
     fontSize: s(0.0105),
     ...style,
   };
-  return href ? (
-    <a href={href} className={className} style={merged}>
+
+  if (submit) {
+    return (
+      <button type="submit" className={base} style={merged}>
+        {children}
+      </button>
+    );
+  }
+
+  const { className: state, ...anchor } = linkProps(href);
+  return (
+    <a {...anchor} className={`${base} ${state ?? ""}`} style={merged}>
       {children}
     </a>
-  ) : (
-    <button type="submit" className={className} style={merged}>
-      {children}
-    </button>
   );
 }
 
@@ -185,10 +196,10 @@ export default function Music() {
         >
           Head over to your preferred platform and listen now
         </h3>
-        {PLATFORMS.map(({ name, filled, col, row }) => (
+        {PLATFORMS.map(({ name, href, filled, col, row }) => (
           <Pill
             key={name}
-            href="#"
+            href={href}
             filled={filled}
             style={{
               left: s(COL_LEFT[col]),
@@ -200,7 +211,7 @@ export default function Music() {
           </Pill>
         ))}
         <Pill
-          href="#"
+          href={STREAMING.soundcloud}
           filled
           style={{
             left: s(0.2504),
@@ -263,6 +274,7 @@ export default function Music() {
             }}
           />
           <Pill
+            submit
             filled
             style={{
               left: s(0.7724),

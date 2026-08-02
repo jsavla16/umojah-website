@@ -1,14 +1,17 @@
 import ShukaBackground from "@/components/ShukaBackground";
 import ViewportBadge from "@/components/ViewportBadge";
+import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Music from "@/components/Music";
 import Services from "@/components/Services";
 import Merch from "@/components/Merch";
+import Contact from "@/components/Contact";
 
 export default function Home() {
   return (
     <>
       <ShukaBackground />
+      <Nav />
       {/* Horizontal padding lives on the sections, not here, so bands like
           Music can run full-bleed to the page edges (with the shuka
           borders overlaying them) the way the mockup does. */}
@@ -17,6 +20,7 @@ export default function Home() {
         <Music />
         <Services />
         <Merch />
+        <Contact />
       </main>
       <ViewportBadge />
     </>
