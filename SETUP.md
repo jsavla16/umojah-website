@@ -88,6 +88,55 @@ Submit a real enquiry and confirm:
 
 ---
 
+## SEO
+
+### Where things live
+
+| File | Holds |
+|---|---|
+| `lib/site.js` | name, URL, descriptions, social profiles — one source of truth so meta tags and JSON-LD can't drift apart |
+| `lib/equipment.js` | hire inventory and the searches each category targets |
+| `components/StructuredData.jsx` | `MusicGroup` + `LocalBusiness` JSON-LD |
+| `app/robots.js`, `app/sitemap.js` | generated at build. **Add a sitemap entry whenever a route is added** — nothing discovers pages automatically |
+| `app/opengraph-image.png` | link preview, picked up by file convention |
+
+### Google Search Console — verification IN PROGRESS
+
+Started 3 Aug. The `google-site-verification` TXT record has been added to
+Vercel DNS; Google reported it couldn't see the record yet and asked to
+retry after a few hours. **Retry the Verify button** — nothing else to do,
+and no need to re-add the record.
+
+Once verified:
+
+- Submit the sitemap: Search Console → Sitemaps → `sitemap.xml`
+- Leave it a few weeks before expecting data in the Performance report
+
+### Keyword research
+
+**Findings so far live in `SEO-RESEARCH.txt`** — competitors, the terms
+worth targeting, and how to run autocomplete research yourself. Read that
+first; the notes below are the method behind it.
+
+
+1. **Search Console is the best source** once it has data, because it shows what you *actually* rank for rather than an estimate. It only reports from the point of verification, so the sooner it's live the better.
+2. **Google Keyword Planner** (free with an Ads account) for volumes. Set location to Kenya. Expect wide ranges unless you're spending.
+3. **Autocomplete and "People also ask"** — free, and often better than tools for local markets. Type "sound system hire nai…" and read what Google suggests. Those are real queries.
+4. **Check competitors.** Search your target terms, see who ranks in Nairobi, look at their page titles and headings.
+
+Caveat: Kenya-specific volumes are small enough that tools often report "insufficient data". That means the tool can't measure it, not that demand is absent. For local markets, autocomplete and competitor pages beat volume estimates.
+
+### The biggest open opportunity: a `/hire` page
+
+The equipment list in `lib/equipment.js` targets commercial searches the site currently can't answer — "generator hire Nairobi", "mixing desk hire", "turntable hire". A dedicated page listing what's available, with real specifics (models, quantities, day rates), is probably the highest-value page that could be added.
+
+Specifics matter: "Funktion One" and "Pioneer CDJ" get searched by name; "DJ equipment" much less so.
+
+### Deliberately not done
+
+- **`keywords` meta tag stuffing.** Google has ignored it for years. Keywords earn their keep in headings, body copy and structured data.
+- **Anything that dilutes the two service lines.** "Hire" and "custom build" are different searches with different buyers; merging them into one message would cost the higher-value one.
+
 ## Still to do
 
 - **WhatsApp** — agreed for a later pass. Number confirmed:
