@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import BeadStripe from "@/components/BeadStripe";
 import { s } from "@/lib/stage";
 
 // Site nav.
@@ -112,7 +111,7 @@ export default function Nav() {
           className="paper fixed inset-0 z-[60] flex flex-col bg-bone md:hidden"
         >
           <div className="flex items-center justify-between px-5 pt-4">
-            <Wordmark className="text-base" />
+            <Wordmark full className="text-base" />
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -134,9 +133,7 @@ export default function Nav() {
             </button>
           </div>
 
-          <BeadStripe className="mt-4" />
-
-          <div className="flex flex-col px-5 pt-2">
+          <div className="flex flex-col px-5 pt-8">
             {PAGES.map((page) => (
               <DrawerLink key={page.href} page={page} pathname={pathname} />
             ))}
@@ -147,14 +144,17 @@ export default function Nav() {
   );
 }
 
-function Wordmark({ className = "", style }) {
+// `full` spells out the whole name. Used in the open drawer, where the
+// menu is the only thing on screen and there's room to say who this is —
+// as opposed to the top bar, where it sits over artwork and stays short.
+function Wordmark({ className = "", style, full = false }) {
   return (
     <Link
       href="/"
       className={`font-display pointer-events-auto uppercase leading-none tracking-[0.08em] text-earth mix-blend-multiply transition-opacity hover:opacity-70 ${className}`}
       style={style}
     >
-      Umojah
+      {full ? "Umojah Sound System" : "Umojah"}
     </Link>
   );
 }
@@ -229,15 +229,19 @@ function DrawerLink({ page, pathname }) {
 
   // Generous vertical padding: each row is a comfortable target and the
   // list reads as a menu rather than a paragraph of links.
+  //
+  // Note there's no justify-between here. Pushing the status to the far
+  // right stranded it across the screen from the word it describes —
+  // sitting it right after the label makes it read as part of the item.
   const base =
-    "font-display flex items-center justify-between py-4 text-2xl uppercase tracking-[0.06em] text-earth";
+    "font-display flex items-baseline gap-3 py-4 text-2xl uppercase tracking-[0.06em] text-earth";
 
   if (!ready) {
     return (
       <span aria-disabled="true" className={`${base} opacity-35`}>
         {label}
-        <span className="font-body text-xs tracking-[0.2em] opacity-80">
-          Soon
+        <span className="font-body text-[0.6rem] tracking-[0.18em]">
+          Coming soon
         </span>
       </span>
     );
