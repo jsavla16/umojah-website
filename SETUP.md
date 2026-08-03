@@ -16,33 +16,52 @@ call, so the project carries no extra dependency for it.
 | | |
 |---|---|
 | Recipients | `umojahsoundsystem@gmail.com`, `j.a.savla@gmail.com` |
-| `.env.local` | created and populated |
+| `.env.local` | holds `CONTACT_TO` and `CONTACT_FROM` only |
+| `RESEND_API_KEY` | shell variable in `~/.zshrc` — **not** in the project folder |
 | Domain verified on Resend | **yes** — 2 Aug, DKIM + SPF + MX + DMARC all green |
 | `CONTACT_FROM` | `bookings@umojahsoundsystem.com` |
-| Vercel env vars | **not set yet** |
-| Tested end to end | **yes** — locally, 2 Aug |
+| Vercel env vars | **set** — 2 Aug |
+| Tested end to end | **yes** — locally and in production, 2 Aug |
 
 If any of the three variables is missing, the form returns *"The form
 isn't configured yet — please email us directly."* rather than failing
 silently.
 
-**Still open:** the API key currently lives in `.env.local`. Moving it to
-a shell variable (`export RESEND_API_KEY=...` in `~/.zshrc`) keeps it out
-of the project folder entirely — agreed for a later pass.
-
 ### The three variables
 
-| Variable | Value |
-|---|---|
-| `RESEND_API_KEY` | from <https://resend.com/api-keys> |
-| `CONTACT_TO` | `"umojahsoundsystem@gmail.com, j.a.savla@gmail.com"` — comma-separated, each is a direct recipient and they don't see each other |
-| `CONTACT_FROM` | display name + address, e.g. `"Umojah Website <bookings@umojahsoundsystem.com>"` |
+| Variable | Where it lives | Value |
+|---|---|---|
+| `RESEND_API_KEY` | `~/.zshrc` locally, Vercel in production | from <https://resend.com/api-keys> |
+| `CONTACT_TO` | `.env.local` + Vercel | `"umojahsoundsystem@gmail.com, j.a.savla@gmail.com"` — comma-separated, each is a direct recipient and they don't see each other |
+| `CONTACT_FROM` | `.env.local` + Vercel | display name + address, e.g. `"Umojah Website <bookings@umojahsoundsystem.com>"` |
 
-### 1. Local (`.env.local`)
+### 1. Local
 
-Already created and git-ignored (`.gitignore` line `.env*.local`). Paste
-the API key into the blank `RESEND_API_KEY=`, then restart the dev server
-— Next.js only reads `.env.local` at boot.
+`.env.local` is git-ignored (`.gitignore` line `.env*.local`) and holds
+the two non-secret variables. Restart the dev server after changing it —
+Next.js only reads it at boot.
+
+**The API key is deliberately not in the project folder.** It's a shell
+variable instead:
+
+```sh
+echo 'export RESEND_API_KEY="re_..."' >> ~/.zshrc
+source ~/.zshrc
+```
+
+`process.env.RESEND_API_KEY` picks it up identically, so no code changed.
+Real shell variables also take precedence over `.env` files, so there's no
+ambiguity if a stray copy ever reappears.
+
+The reasoning: anything inside the project folder is read by editors,
+backup and sync tools, screen shares and AI assistants. A secret that
+never enters the folder can't leak from it. Production is unaffected —
+Vercel injects its own copy.
+
+**Gotcha:** apps launched from the Dock or Spotlight don't always source
+`~/.zshrc`. If the form suddenly reports "not configured" locally, start
+the dev server from a normal Terminal window and check with
+`echo $RESEND_API_KEY`.
 
 ### 2. Resend account and sender
 
@@ -68,13 +87,14 @@ Verified — mostly DNS propagation. "Pending" during that window is normal.
 If the domain is ever moved off Vercel's nameservers, these records must
 move with it or the form stops sending.
 
-### 4. Vercel
+### 4. Vercel — DONE
 
-Project → **Settings → Environment Variables** → add all three, ticked for
+Project → **Settings → Environment Variables**, all three set for
 **Production, Preview and Development** (Preview matters, or branch
-deploys can't send).
+deploys can't send). Confirmed working in production 2 Aug.
 
-Then **redeploy** — Vercel only picks up environment changes on a new
+**If the key is ever rotated, Vercel needs the new value too** — and then
+a **redeploy**, because Vercel only picks up environment changes on a new
 build. An existing deployment will not see them.
 
 ### 5. Test
