@@ -1,17 +1,16 @@
 import Image from "next/image";
 import warriorLeft from "@/public/images/hero/warrior-left-trim.png";
 import warriorRight from "@/public/images/hero/warrior-right-trim.png";
-import medallion from "@/public/images/hero/medallion-crop.png";
-import stackLogo from "@/public/images/hero/stack-logo-trim.svg";
+import Medallion from "@/components/Medallion";
 import { HERO_STAGE as STAGE, stageFraction } from "@/lib/stage";
 
 // Home / 1.1 Hero.
 //
-// Rebuilt as a proportional "stage" rather than a flex row. Every value
-// below was measured directly off the Canva mockup
-// (Umojah_Website_Design_Final_Canva/Home page.png, 2732px wide, hero band
-// ending at y=1536) and expressed as a fraction of that artboard, so the
-// whole composition scales as one and matches the design at any width:
+// TWO LAYOUTS, ONE DESIGN
+// Desktop keeps the proportional "stage": every value measured off the
+// Canva mockup (Home page.png, 2732px wide, hero band ending at y=1536)
+// and expressed as a fraction of that artboard, so the composition scales
+// as one and matches the design at any width.
 //
 //   stage aspect        2732 x 1536
 //   medallion           x 527-2171 (left 19.29%, width 60.18%), top edge
@@ -23,23 +22,35 @@ import { HERO_STAGE as STAGE, stageFraction } from "@/lib/stage";
 //   Services/Music      y 1253-1353 — a clear band BELOW the warriors'
 //                       feet, not overlapping them, centred under each
 //                       warrior, 385px wide (14.09%)
-//   inside the ring     stack logo 25.43% of medallion width at 23.05%
-//                       down; UMOJAH cap-top at 50.30%; SOUND SYSTEM at
-//                       57.91% (all as fractions of medallion width)
+//
+// Below `md` (768px) that composition stops working, and not because
+// things are merely small. The stage is capped by viewport WIDTH, so on a
+// 390px phone HERO_STAGE resolves to 294px and every fraction of it
+// collapses: SOUND SYSTEM to 5.7px, the buttons to 5.2px text in a 10.8px
+// box — roughly a quarter of the 44px minimum touch target. Scaling type
+// back up in place is not possible either, because the wordmark lives
+// INSIDE the medallion's ring; its size is welded to the badge's size.
+//
+// So mobile changes the composition rather than the scale. The medallion
+// goes from 60% of the stage to the full column width, which makes the
+// ring contents legible for free (see components/Medallion.jsx), and the
+// warriors move from flanking the badge to standing above their own
+// buttons — the same relationship the mockup has, stacked instead of
+// spread. Buttons become real 48px touch targets.
 //
 // Sizing notes:
-// - The top crop is baked into medallion-crop.png (6.56% off the top,
-//   matching the mockup) instead of being done with CSS overflow. Earlier
-//   attempts to crop in CSS kept clipping the tassels too, because a
-//   negative margin also changes what height flexbox thinks the item
-//   needs. Cropping the asset removes that whole class of bug.
-// - --stage is the one knob for overall scale; every length derives from
-//   it, so nothing can drift out of proportion.
-
+// - The medallion's top crop is baked into medallion-crop.png (6.56% off
+//   the top, matching the mockup) instead of being done with CSS
+//   overflow. Earlier attempts to crop in CSS kept clipping the tassels
+//   too, because a negative margin also changes what height flexbox
+//   thinks the item needs. Cropping the asset removes that class of bug —
+//   and is why there are no negative margins in the mobile layout either.
+// - --stage remains the one knob for desktop scale.
 
 const s = stageFraction(STAGE);
 
-function AnchorButton({ href, label, centre }) {
+// Desktop: positioned on the stage, sized as a fraction of it.
+function StageButton({ href, label, centre }) {
   return (
     <a
       href={href}
@@ -57,12 +68,56 @@ function AnchorButton({ href, label, centre }) {
   );
 }
 
+// Mobile: a real control. Fixed 48px height rather than a fraction of
+// anything — touch targets are an absolute ergonomic minimum, not a
+// proportion of the artwork.
+function TapButton({ href, label }) {
+  return (
+    <a
+      href={href}
+      className="font-display flex h-12 flex-1 items-center justify-center rounded-md border-2 border-earth bg-bone text-sm uppercase tracking-[0.1em] text-earth"
+    >
+      {label}
+    </a>
+  );
+}
+
 export default function Hero() {
   return (
-    <section id="hero" className="paper relative bg-bone px-12">
-      {/* Proportional stage — matches the mockup's hero artboard ratio. */}
+    <section id="hero" className="paper relative bg-bone px-4 md:px-12">
+      {/* ---------------------------------------------------------------
+          MOBILE — normal flow, no fixed aspect. The section is as tall as
+          its contents, which is what lets the type stay readable.
+          --------------------------------------------------------------- */}
+      <div className="md:hidden">
+        {/* Full column width, so the ring contents scale up with it.
+            Passed as an absolute length, not 100%, because percentage
+            font-sizes resolve against the parent's font-size rather than
+            its width — calc() on a length is the only thing that works
+            here. `calc(100vw - 32px)` is the section's px-4 gutters. */}
+        <Medallion
+          width="calc(100vw - 32px)"
+          className="relative mx-auto"
+          priority
+        />
+
+        {/* No warriors here, deliberately. On desktop they flank the
+            medallion and read as a guard; at phone width they shrink to
+            decoration, and they pushed the two CTAs down the screen for
+            no gain. The badge is strong enough alone, and the tassels
+            now lead the eye straight into the buttons. The figures still
+            carry the motif on desktop and elsewhere on the site. */}
+        <div className="flex gap-3 pb-10 pt-3">
+          <TapButton href="#services" label="Services" />
+          <TapButton href="#music" label="Music" />
+        </div>
+      </div>
+
+      {/* ---------------------------------------------------------------
+          DESKTOP — the proportional stage, unchanged.
+          --------------------------------------------------------------- */}
       <div
-        className="relative mx-auto"
+        className="relative mx-auto hidden md:block"
         style={{ width: STAGE, aspectRatio: "2732 / 1536" }}
       >
         {/* Left warrior */}
@@ -97,75 +152,15 @@ export default function Hero() {
             bottom of the hero so the tassels run into the Music section.
             z-10 keeps it above Music's terracotta background, which would
             otherwise paint over it since Music comes later in the DOM. */}
-        <div
+        <Medallion
+          width={s(0.6018)}
           className="absolute top-0 z-10"
-          style={{ left: "19.29%", width: "60.18%" }}
-        >
-          <Image
-            src={medallion}
-            alt="Umojah Sound System beaded medallion badge"
-            priority
-            className="h-auto w-full"
-            sizes="62vw"
-          />
+          style={{ left: "19.29%" }}
+          priority
+        />
 
-          {/* --- Contents of the ring's hollow ---------------------------
-              The hollow is a circle: centre 49.8%/28.6% of the medallion
-              image, radius 26.6% of its width. It is a tight fit — in the
-              mockup UMOJAH spans almost the full inner diameter — so each
-              element is positioned absolutely at its measured mark rather
-              than flowing one after another. Flow was what pushed SOUND
-              SYSTEM down onto the ring: it inherited UMOJAH's line box
-              height plus a margin, landing ~30px below its true position.
-
-              Percentages are of the medallion wrapper's HEIGHT, converted
-              from the mockup's width-fractions by dividing by the image's
-              1.3502 aspect. Cap-top marks are nudged up slightly to allow
-              for the leading above the caps in the line box. */}
-
-          {/* The whole group is lifted 2.26% (of medallion height) above the
-              mockup's marks so it sits on the hollow's true centre. Measured
-              at the mockup's own positions the block's midpoint lands ~34px
-              low against a 1098px medallion, which reads as bottom-heavy. */}
-
-          {/* Speaker stack mark — cap top 23.05% of medallion width */}
-          <div
-            className="absolute -translate-x-1/2"
-            style={{ left: "50%", top: "14.80%", width: "25.43%" }}
-          >
-            <Image src={stackLogo} alt="" className="h-auto w-full" />
-          </div>
-
-          {/* UMOJAH — cap top 50.30% of medallion width. Sized a touch
-              under the mockup so it clears the ring rather than grazing
-              it (the mockup's own wordmark is within ~1px of touching). */}
-          <h1
-            className="font-display absolute inset-x-0 text-center uppercase leading-none tracking-[0.04em] text-earth"
-            style={{ top: "34.24%", fontSize: s(0.0475) }}
-          >
-            Umojah
-          </h1>
-
-          {/* SOUND SYSTEM — cap top 57.91% of medallion width.
-              Deep earth fill with an earth gold outline; paint-order keeps
-              the stroke behind the fill so the letterforms stay full
-              weight instead of being eaten into from both sides. */}
-          <p
-            className="font-heading absolute inset-x-0 text-center uppercase leading-none tracking-[0.16em] text-earth"
-            style={{
-              top: "40.31%",
-              fontSize: s(0.0193),
-              WebkitTextStrokeWidth: "0.055em",
-              WebkitTextStrokeColor: "var(--color-gold)",
-              paintOrder: "stroke fill",
-            }}
-          >
-            Sound System
-          </p>
-        </div>
-
-        <AnchorButton href="#services" label="Services" centre="12.72%" />
-        <AnchorButton href="#music" label="Music" centre="87.28%" />
+        <StageButton href="#services" label="Services" centre="12.72%" />
+        <StageButton href="#music" label="Music" centre="87.28%" />
       </div>
     </section>
   );
