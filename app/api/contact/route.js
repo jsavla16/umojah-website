@@ -49,8 +49,20 @@ export async function POST(request) {
   }
 
   const { RESEND_API_KEY, CONTACT_TO, CONTACT_FROM } = process.env;
-  if (!RESEND_API_KEY || !CONTACT_TO || !CONTACT_FROM) {
-    console.error("Contact form: missing RESEND_API_KEY / CONTACT_TO / CONTACT_FROM");
+
+  // Name the specific offenders. Logging all three every time made a
+  // production failure impossible to diagnose without guessing — worth
+  // remembering that a log line is only useful if it narrows something.
+  // Values are never logged, only which names were absent.
+  const missing = ["RESEND_API_KEY", "CONTACT_TO", "CONTACT_FROM"].filter(
+    (key) => !process.env[key],
+  );
+  if (missing.length) {
+    console.error(
+      `Contact form: missing environment variable(s): ${missing.join(", ")}. ` +
+        "In production these come from Vercel → Settings → Environment " +
+        "Variables, and require a redeploy after being added.",
+    );
     return Response.json(
       { error: "The form isn't configured yet — please email us directly." },
       { status: 503 },

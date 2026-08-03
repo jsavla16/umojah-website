@@ -97,6 +97,33 @@ deploys can't send). Confirmed working in production 2 Aug.
 a **redeploy**, because Vercel only picks up environment changes on a new
 build. An existing deployment will not see them.
 
+### Troubleshooting — two real failures, 3 Aug
+
+**"The form isn't configured yet"** (HTTP 503) means a variable is *absent*,
+not wrong. A bad key fails later and gives a different message. Cause that
+day: `CONTACT_TO` and `CONTACT_FROM` had never been added to Vercel.
+`.env.local` is gitignored, so **pushing to master does not carry it** —
+Vercel only knows what's in its own settings. The three variables must be
+set in both places independently.
+
+**"Couldn't send just now"** (HTTP 502) means Resend rejected the send. The
+route logs `Resend rejected the send:` with the status:
+
+| Status | Meaning |
+|---|---|
+| 401 | wrong API key — e.g. Vercel still holds a key that's been rotated out |
+| 403 | sending from `onboarding@resend.dev`, which **only delivers to the address the Resend account was registered with**. Any second recipient fails the whole send |
+| 422 | malformed recipient — usually stray quotes, see below |
+
+**Quotes: `.env.local` yes, Vercel no.** In `.env.local` the surrounding
+double quotes are shell syntax and get stripped. Vercel's value field takes
+the string literally, so pasting `"a@x.com, b@y.com"` produces recipients
+with quote characters attached and Resend rejects them. Paste values into
+Vercel **unquoted**.
+
+**Env changes need a redeploy.** Vercel applies them at build time only; an
+existing deployment will never see them.
+
 ### 5. Test
 
 Submit a real enquiry and confirm:
