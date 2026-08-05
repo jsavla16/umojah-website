@@ -39,3 +39,7 @@ archive/
 
 # prop docs
 SEO-RESEARCH.txt
+# macOS custom folder icons (the filename ends in a carriage return,
+# which breaks builds on Linux and Windows)
+Icon?
+._*
