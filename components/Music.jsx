@@ -258,7 +258,7 @@ function MobileMusic() {
         </h3>
         <p className="font-body mt-3 text-center text-[0.95rem] leading-relaxed text-earth">
           Original roots and dub from East Africa&rsquo;s foundation sound.
-          Productions by Dread Steppa &mdash; coming in 2026. Be first to know
+          Productions by Dread Steppa &mdash; coming in 2026. Be the first to know
           when it drops.
         </p>
 
