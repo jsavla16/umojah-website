@@ -76,8 +76,8 @@ const SMOKE = { top: 0.283, width: 0.45, height: 0.3751 };
 // more. Streaming sits on terracotta and takes bone; Records sits on the
 // bone half and takes terracotta.
 const SMOKE_CLOUDS = [
-  { id: "streaming", centre: 0.23, color: "var(--color-bone)" },
-  { id: "records", centre: 0.742, color: "var(--color-terracotta)" },
+  { id: "streaming", centre: 0.285, color: "var(--color-bone)" },
+  { id: "records", centre: 0.802, color: "var(--color-terracotta)" },
 ];
 
 const BUTTON = { width: 0.1512, height: 0.0406 };
