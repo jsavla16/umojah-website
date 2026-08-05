@@ -46,8 +46,17 @@ export default function StructuredData() {
         addressLocality: SITE.locality,
         addressCountry: SITE.country,
       },
+      // Cities named here must match the cities named in the Services copy
+      // (components/Services.jsx). Structured data that claims coverage the
+      // visible page doesn't is exactly the inconsistency Google discounts,
+      // and the visible copy is what actually carries ranking weight — this
+      // just makes the claim machine-readable.
       areaServed: [
         { "@type": "Country", name: "Kenya" },
+        { "@type": "City", name: "Nairobi" },
+        { "@type": "City", name: "Mombasa" },
+        { "@type": "City", name: "Kisumu" },
+        { "@type": "City", name: "Nakuru" },
         { "@type": "Place", name: "East Africa" },
       ],
       sameAs: SITE.profiles,

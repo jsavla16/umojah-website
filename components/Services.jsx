@@ -1,5 +1,7 @@
 import Image from "next/image";
-import flightCase from "@/public/images/services/flight-case-trim.png";
+// flight-case-trim.png is no longer used here — it belonged to the third
+// panel ("Experience It"), dropped in v2. The asset is still in
+// /public/images/services if a later section wants it.
 import bassBins from "@/public/images/services/bass-bins-trim.png";
 import venue from "@/public/images/services/venue-trim.png";
 import { STAGE, s } from "@/lib/stage";
@@ -7,8 +9,10 @@ import { STAGE, s } from "@/lib/stage";
 
 // Home / 1.3 Services — "Feel the Vibrations".
 //
-// Measured off the Canva mockup (2732px page, Services band y 3072-4608).
-// Three full-height panels running edge to edge, with the section header
+// Measured off the Canva mockup. v2 is a 1366px page with 768px bands —
+// exactly half v1's 2732/1536 — so every stage fraction below carries over
+// unchanged; only the panel count and copy differ.
+// Two full-height panels running edge to edge, with the section header
 // overlaid top-left so "VIBRATIONS" bleeds across onto the terracotta
 // panel exactly as in the design:
 //
@@ -31,60 +35,48 @@ import { STAGE, s } from "@/lib/stage";
 const PANELS = [
   {
     id: "hire",
-    title: "Hire the Equipment",
-    audience: ["Corporates", "Weddings", "Birthdays"],
-    body: "Your event, your DJs, our sound. We deliver, set up and tune the system so your night sounds exactly right — then we pack it down and disappear.",
-    bodyWidth: "74%",
-    cta: "Get a Quote",
-    image: flightCase,
-    imageAlt: "Illustration of a stacked pair of flight cases",
-    imageLeft: 0.0996,
-    imageWidth: 0.1552,
-    imageBottom: 0.0128,
-    // The left shuka border covers 74px of this panel, so the mockup
+    title: "Sound System Hire",
+    // "Corporate", not "Corporates" — the v2 artboard has the typo.
+    audience: ["Corporate Events", "Weddings", "Birthdays", "Festivals", "Clubs"],
+    body: "Hire the full roots, reggae and dub experience — or just the gear. PA systems, speakers, amplifiers, DJ equipment, microphones, mixing desks, generators and power. Delivered across Kenya, from Nairobi to Mombasa, Kisumu and Nakuru, set up and tuned to the room by the people who built it.",
+    bodyWidth: "85%",
+    // Five audience labels instead of three, so this tag runs far wider
+    // than the build panel's. Pinned per-panel rather than sized to its
+    // own text — letting it hug the content is what made the longest
+    // label swell to the full panel width and lose its margins.
+    tagWidth: 0.434,
+    cta: "Find Out More",
+    image: venue,
+    imageAlt: "Illustration of the Umojah stack installed in a venue",
+    imageLeft: 0.029,
+    imageWidth: 0.472,
+    imageBottom: 0,
+    // The left shuka border covers part of this panel, so the mockup
     // nudges its centred content right to sit optically centred in the
     // visible area rather than in the panel box.
     centreOffset: 0.012,
-    ctaRight: 0.022,
+    ctaRight: 0.014,
     ctaHref: "#contact-hire",
     dark: false,
   },
   {
     id: "build",
-    title: "Build a Bespoke System",
+    title: "Build a Bespoke Sound System",
     audience: ["Restaurants", "Bars", "Audiophiles"],
-    body: "Bespoke sound built with intention. We design, build, install and maintain a system tuned to your space — from an intimate bar to a full venue install. No compromises.",
-    bodyWidth: "80%",
+    body: "Bespoke sound, built with intention. We design, build, install and maintain systems tuned to your space — from an intimate bar to a full venue install. Consultations anywhere in Kenya: Nairobi, Mombasa, Kisumu, Nakuru. No compromises.",
+    bodyWidth: "85%",
+    tagWidth: 0.243,
     cta: "Start a Conversation",
     image: bassBins,
     imageAlt: "Illustration of a stack of bass bin speaker cabinets",
-    imageLeft: 0.0589,
-    imageWidth: 0.2024,
+    imageLeft: 0.125,
+    imageWidth: 0.264,
     imageBottom: 0.0095,
     centreOffset: 0,
-    ctaRight: 0.0095,
+    // clears the 2.71%-wide shuka border on the page edge
+    ctaRight: 0.041,
     ctaHref: "#contact-build",
     dark: true,
-  },
-  {
-    id: "experience",
-    title: "Experience It",
-    audience: ["Festivals", "Clubs", "Serious Events"],
-    body: "Equipment, selektors and MCs. The full session, the full experience. We bring the stacks, the sound and the culture — and we play till the dance is done.",
-    bodyWidth: "68%",
-    cta: "Book Now",
-    image: venue,
-    imageAlt: "Illustration of the Umojah stack installed in a venue",
-    imageLeft: 0.0029,
-    // Trimmed back from the mockup's 34% so the artwork stops just inside
-    // the shuka border instead of running underneath it.
-    imageWidth: 0.3221,
-    imageBottom: 0,
-    centreOffset: 0,
-    // clears the 2.71%-wide shuka border on the page edge
-    ctaRight: 0.038,
-    ctaHref: "#contact-experience",
-    dark: false,
   },
 ];
 
@@ -104,6 +96,7 @@ function Panel({ panel }) {
     ctaRight,
     ctaHref,
     dark,
+    tagWidth,
   } = panel;
   const ink = dark ? "text-bone" : "text-earth";
 
@@ -150,7 +143,7 @@ function Panel({ panel }) {
           <span
             className="font-body inline-flex items-center justify-center whitespace-nowrap rounded-md bg-earth font-bold uppercase tracking-[0.04em] text-bone"
             style={{
-              width: s(0.252),
+              width: s(tagWidth),
               height: s(0.0187),
               fontSize: s(0.0102),
               paddingLeft: s(0.008),
@@ -204,21 +197,18 @@ export default function Services() {
         className="relative mx-auto overflow-hidden"
         style={{ width: STAGE, height: s(0.5622) }}
       >
+        {/* v2 splits the band 50/50 — the seam falls at x=684 of 1366. The
+            soft terracotta wash that used to bleed over panel 3 is gone
+            with it: terracotta now runs from the seam to the page edge, so
+            the seam is a hard edge and needs no feathering. */}
         <div
           className="absolute inset-0 grid"
-          style={{ gridTemplateColumns: "32.39fr 32.10fr 35.51fr" }}
+          style={{ gridTemplateColumns: "1fr 1fr" }}
         >
           {PANELS.map((panel) => (
             <Panel key={panel.id} panel={panel} />
           ))}
         </div>
-
-        {/* Soft right edge of the terracotta tile, washing over panel 3 */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute top-0 z-[15] h-full bg-terracotta opacity-25"
-          style={{ left: s(0.6449), width: s(0.0311) }}
-        />
 
         {/* Section header — above the panels, deliberately running across
             the panel 1 / panel 2 seam. Set entirely in Deep Earth with an
