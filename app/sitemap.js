@@ -12,6 +12,12 @@ export default function sitemap() {
       priority: 1,
     },
     {
+      url: `${SITE.url}/music`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${SITE.url}/about`,
       lastModified: now,
       changeFrequency: "monthly",

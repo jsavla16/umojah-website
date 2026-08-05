@@ -39,7 +39,7 @@ const PANELS = [
     // "Corporate", not "Corporates" — the v2 artboard has the typo.
     audience: ["Corporate Events", "Weddings", "Birthdays", "Festivals", "Clubs"],
     body: "Hire the full roots, reggae and dub experience — or just the gear. PA systems, speakers, amplifiers, DJ equipment, microphones, mixing desks, generators and power. Delivered across Kenya, from Nairobi to Mombasa, Kisumu and Nakuru, set up and tuned to the room by the people who built it.",
-    bodyWidth: "85%",
+    bodyWidth: "90%",
     // Five audience labels instead of three, so this tag runs far wider
     // than the build panel's. Pinned per-panel rather than sized to its
     // own text — letting it hug the content is what made the longest
@@ -48,8 +48,26 @@ const PANELS = [
     cta: "Find Out More",
     image: venue,
     imageAlt: "Illustration of the Umojah stack installed in a venue",
-    imageLeft: 0.029,
-    imageWidth: 0.472,
+    // Centred in the panel now that the CTA sits above rather than on top
+    // of it, plus the 0.012 shuka nudge the copy also gets.
+    imageLeft: 0.1025,
+    // 0.36, not the artboard's ~0.47. IMAGE WIDTH CONTROLS IMAGE HEIGHT:
+    // venue-trim.png is 883x777, so every 100px of width adds 88px of
+    // height, and since the image is anchored to the panel floor, growing
+    // it pushes its TOP edge upward. At 0.472 the top edge reached y=201 —
+    // above the paragraph at y=225 — so the artwork covered the copy
+    // completely. At 0.36 the top edge sits at y=335, clearing the
+    // paragraph's last line at y=323.
+    //
+    // The artboard can run it wider because its paragraph is 3 lines; ours
+    // is 4, because the approved copy names the cities. Copy earns its
+    // place here, artwork yields.
+    // 0.319, compressed again from 0.36 to open a lane for the CTA.
+    // Width drives height (883x777, so 0.88 tall per 1 wide) and the image
+    // is anchored to the panel floor, so shrinking it lowers its TOP edge:
+    // 0.36 put the top at y=335, 0.319 puts it at y=385 — clear of the
+    // CTA, which now ends at 370.
+    imageWidth: 0.319,
     imageBottom: 0,
     // The left shuka border covers part of this panel, so the mockup
     // nudges its centred content right to sit optically centred in the
@@ -58,25 +76,34 @@ const PANELS = [
     ctaRight: 0.014,
     ctaHref: "#contact-hire",
     dark: false,
+    // Mobile inverts desktop — see MobileService.
+    mobileDark: true,
   },
   {
     id: "build",
     title: "Build a Bespoke Sound System",
     audience: ["Restaurants", "Bars", "Audiophiles"],
     body: "Bespoke sound, built with intention. We design, build, install and maintain systems tuned to your space — from an intimate bar to a full venue install. Consultations anywhere in Kenya: Nairobi, Mombasa, Kisumu, Nakuru. No compromises.",
-    bodyWidth: "85%",
+    bodyWidth: "90%",
     tagWidth: 0.243,
     cta: "Start a Conversation",
     image: bassBins,
     imageAlt: "Illustration of a stack of bass bin speaker cabinets",
-    imageLeft: 0.125,
-    imageWidth: 0.264,
+    imageLeft: 0.1455,
+    // Same rule as the venue image above — bass-bins-trim.png is 563x729,
+    // so it grows 1.29px tall for every 1px wide. 0.235 puts its top edge
+    // at y=339, below the paragraph.
+    // Same reasoning as the venue image — 563x729, so 1.29 tall per 1
+    // wide. 0.209 puts its top edge at y=385 too, so both panels' artwork
+    // starts on the same line.
+    imageWidth: 0.209,
     imageBottom: 0.0095,
     centreOffset: 0,
     // clears the 2.71%-wide shuka border on the page edge
     ctaRight: 0.041,
     ctaHref: "#contact-build",
     dark: true,
+    mobileDark: false,
   },
 ];
 
@@ -154,19 +181,66 @@ function Panel({ panel }) {
           </span>
         </div>
 
+        {/* THE BODY HAS A HEIGHT BUDGET. Read this before editing copy.
+
+            Everything in this panel is absolutely positioned, so the
+            paragraph cannot push the artwork down — it just runs behind
+            it, which is exactly what the Canva v2 artboard does (its Hire
+            paragraph ends mid-sentence on "PA Systems and"). The mockup
+            didn't reveal a copy problem; it revealed a layout that can't
+            express one.
+
+            The budget, at a 1366px stage:
+              body top    0.1647 * 1366  = 225px
+              artwork top                ≈ 357px
+              available                  = 132px
+
+            At 90% of a 683px panel and ~0.5em average glyph width, the
+            longest line holds ~73 characters. The Hire copy is 285
+            characters, so 4 lines at 1.45 leading = 98px. Fits, with 34px
+            spare.
+
+            At the previous s(0.0136) it was 62 characters per line, which
+            tipped Hire to 5 lines = 135px and overran the artwork by 3px.
+            Three pixels, and the paragraph read as broken.
+
+            So: if the copy grows past roughly 290 characters, this size
+            has to come down again, or the artwork has to move. Don't just
+            add a sentence and assume it fits. */}
         <p
           className={`font-body absolute left-1/2 -translate-x-1/2 text-center font-normal leading-[1.45] ${ink}`}
-          style={{ top: s(0.1647), width: bodyWidth, fontSize: s(0.0136) }}
+          style={{ top: s(0.1647), width: bodyWidth, fontSize: s(0.0124) }}
         >
           {body}
         </p>
 
         </div>
 
-        {/* CTA — right-aligned within the panel */}
+        {/* CTA — centred under the paragraph.
+            It used to be right-aligned, floating at the panel edge over
+            the artwork, which made it read as a label attached to the
+            illustration rather than the conclusion of the copy above it.
+            The artboard does right-align it, but the artboard also has a
+            three-line paragraph and larger artwork; once those changed the
+            alignment stopped making sense. Centred, it matches the
+            full-width button on mobile and sits where the eye lands after
+            the last line.
+
+            centreOffset is applied here too so it tracks the panel's
+            optical centre — the same nudge the copy block gets to allow
+            for the shuka border overlapping panel 1. */}
         <div
-          className="absolute flex justify-end"
-          style={{ top: s(0.2683), left: 0, right: s(ctaRight) }}
+          className="absolute flex justify-center"
+          style={{
+            // 0.244, moved up from 0.2683 so it sits in the lane between
+            // the paragraph (ends y=323) and the artwork (now starts
+            // y=385) rather than on top of the illustration. The artwork
+            // was compressed to make that lane — see imageWidth above.
+            top: s(0.244),
+            left: 0,
+            right: 0,
+            transform: `translateX(${s(centreOffset)})`,
+          }}
         >
           <a
             href={ctaHref}
@@ -190,11 +264,110 @@ function Panel({ panel }) {
   );
 }
 
+// MOBILE SERVICE BLOCK.
+//
+// One full section per service, stacked, in normal flow. This is not the
+// desktop panel shrunk — at 360px each desktop panel would be 180px wide
+// and every measured offset would collapse.
+//
+// Normal flow also removes the collision class of bug entirely: here the
+// paragraph pushes the artwork down instead of being painted over by it,
+// so copy can grow without anyone recalculating a height budget. The
+// desktop panel can't do that, which is why it needs one.
+//
+// The mobile artboards INVERT the desktop colours — Hire is terracotta
+// here and bone on desktop, Build the reverse. Deliberate in the design,
+// so `mobileDark` is a separate flag from `dark`.
+function MobileService({ panel, showEyebrow }) {
+  const { title, audience, body, cta, image, imageAlt, ctaHref, mobileDark } =
+    panel;
+
+  const ink = mobileDark ? "text-bone" : "text-earth";
+  const pill = mobileDark ? "bg-bone text-earth" : "bg-earth text-bone";
+  const button = mobileDark
+    ? "border-bone bg-bone text-earth"
+    : "border-earth bg-earth text-bone";
+
+  return (
+    <div
+      className={`paper px-5 pb-10 pt-8 ${
+        mobileDark ? "bg-terracotta" : "bg-bone"
+      }`}
+    >
+      {showEyebrow && (
+        <p
+          className={`font-body text-[0.7rem] font-bold uppercase tracking-[0.3em] ${ink}`}
+        >
+          Our Services
+        </p>
+      )}
+
+      <h2
+        className="font-display mt-1 text-2xl uppercase leading-tight tracking-[0.03em] text-gold"
+        style={{
+          WebkitTextStrokeWidth: "0.03em",
+          WebkitTextStrokeColor: "var(--color-earth)",
+          paintOrder: "stroke fill",
+        }}
+      >
+        {title}
+      </h2>
+
+      {/* Wraps rather than scrolls — the hire panel carries five labels,
+          which will not fit on one line at this width. */}
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {audience.map((label) => (
+          <span
+            key={label}
+            className={`font-body rounded px-2 py-1 text-[0.6rem] font-bold uppercase tracking-[0.04em] ${pill}`}
+          >
+            {label}
+          </span>
+        ))}
+      </div>
+
+      <p className={`font-body mt-4 text-[0.95rem] leading-relaxed ${ink}`}>
+        {body}
+      </p>
+
+      <Image
+        src={image}
+        alt={imageAlt}
+        className="mt-6 h-auto w-full"
+        sizes="100vw"
+      />
+
+      <a
+        href={ctaHref}
+        className={`font-display mt-6 flex h-12 w-full items-center justify-center rounded-md border-2 text-sm uppercase tracking-[0.08em] ${button}`}
+      >
+        {cta}
+      </a>
+    </div>
+  );
+}
+
 export default function Services() {
   return (
     <section id="services" className="paper relative bg-bone">
+      {/* ---------------------------------------------------------------
+          MOBILE — two stacked sections, Hire first.
+          --------------------------------------------------------------- */}
+      <div className="md:hidden">
+        {PANELS.map((panel, index) => (
+          <MobileService
+            key={panel.id}
+            panel={panel}
+            showEyebrow={index === 0}
+          />
+        ))}
+      </div>
+
+      {/* ---------------------------------------------------------------
+          DESKTOP — the proportional stage.
+          --------------------------------------------------------------- */}
       <div
-        className="relative mx-auto overflow-hidden"
+        className="relative mx-auto hidden overflow-hidden md:block"
         style={{ width: STAGE, height: s(0.5622) }}
       >
         {/* v2 splits the band 50/50 — the seam falls at x=684 of 1366. The

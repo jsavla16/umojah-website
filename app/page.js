@@ -2,8 +2,9 @@ import ShukaBackground from "@/components/ShukaBackground";
 import ViewportBadge from "@/components/ViewportBadge";
 import StructuredData from "@/components/StructuredData";
 import Nav from "@/components/Nav";
+import NavClearance from "@/components/NavClearance";
 import Hero from "@/components/Hero";
-import Music from "@/components/Music";
+import Events from "@/components/Events";
 import Services from "@/components/Services";
 import Merch from "@/components/Merch";
 import Contact from "@/components/Contact";
@@ -36,8 +37,15 @@ export default function Home() {
           Music can run full-bleed to the page edges (with the shuka
           borders overlaying them) the way the mockup does. */}
       <main className="min-h-screen">
+        {/* Nav clearance — zero by default here, because the medallion is
+            meant to sit high in the frame and any clearance pushes it
+            down. The knob is present so it's adjustable without hunting:
+            raise `desktop` toward 0.02 and `mobile` toward 40 if the nav
+            crowds the top of the badge. */}
+        <NavClearance desktop={0} mobile={0} />
         <Hero />
-        <Music />
+        {/* Music has moved to its own route at /music. */}
+        <Events />
         <Services />
         <Merch />
         <Contact />

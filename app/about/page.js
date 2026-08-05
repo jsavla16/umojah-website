@@ -1,6 +1,7 @@
 import ShukaBackground from "@/components/ShukaBackground";
 import ViewportBadge from "@/components/ViewportBadge";
 import Nav from "@/components/Nav";
+import NavClearance from "@/components/NavClearance";
 import SoundSystem from "@/components/SoundSystem";
 import Crew from "@/components/Crew";
 import Collaborations from "@/components/Collaborations";
@@ -26,6 +27,9 @@ export default function About() {
       <ShukaBackground />
       <Nav />
       <main className="min-h-screen">
+        {/* Nav clearance — adjust these two numbers. This page opens on
+            the speaker stack, which the nav was sitting over. */}
+        <NavClearance desktop={0.03} mobile={56} />
         <SoundSystem />
         <Crew />
         <Collaborations />

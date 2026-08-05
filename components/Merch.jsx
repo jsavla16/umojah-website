@@ -136,11 +136,80 @@ function ProductCard({ product }) {
   );
 }
 
+// MOBILE CARD.
+//
+// Four products across one row at 360px gives each card about 80px — the
+// artwork becomes a smudge and the labels are unreadable. A 2x2 grid
+// doubles that to ~165px and keeps all four visible, which a swipe
+// carousel would not: three of the four would be hidden behind a gesture
+// people frequently miss.
+//
+// Sized in normal flow rather than off --stage. The desktop card is a
+// fixed fraction of the artboard; here the grid decides the width and the
+// card fills it, so nothing needs measuring and nothing can collide.
+function MobileCard({ product }) {
+  const { id, lines, image, alt, bg } = product;
+  const { className: state, ...anchor } = linkProps(merchHref(id));
+
+  return (
+    <a
+      {...anchor}
+      className={`paper block ${bg} ${state ?? ""}`}
+      // aspect-[3/4] keeps every card the same shape whatever its artwork,
+      // so the grid stays even without hardcoded heights.
+    >
+      <div className="flex aspect-[3/4] items-center justify-center p-3">
+        <Image
+          src={image}
+          alt={alt}
+          className="h-auto w-full max-w-none"
+          sizes="45vw"
+        />
+      </div>
+      <p className="font-body px-2 pb-3 text-center text-[0.6rem] font-medium uppercase leading-[1.35] tracking-[0.06em] text-earth">
+        {lines.map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))}
+      </p>
+    </a>
+  );
+}
+
 export default function Merch() {
   return (
     <section id="merch" className="paper relative bg-charcoal">
+      {/* ---------------------------------------------------------------
+          MOBILE — 2x2 grid in normal flow.
+          --------------------------------------------------------------- */}
+      <div className="px-5 py-10 md:hidden">
+        <p className="font-body text-center text-[0.7rem] font-bold uppercase tracking-[0.3em] text-bone">
+          Wear the Culture
+        </p>
+        <h2
+          className="font-display mt-2 text-center text-3xl uppercase leading-none tracking-[0.04em] text-gold"
+          style={{
+            WebkitTextStrokeWidth: "0.035em",
+            WebkitTextStrokeColor: "var(--color-earth)",
+            paintOrder: "stroke fill",
+          }}
+        >
+          Merchandising
+        </h2>
+
+        <div className="mt-6 grid grid-cols-2 gap-4">
+          {PRODUCTS.map((product) => (
+            <MobileCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
+
+      {/* ---------------------------------------------------------------
+          DESKTOP — the proportional stage, unchanged.
+          --------------------------------------------------------------- */}
       <div
-        className="relative mx-auto"
+        className="relative mx-auto hidden md:block"
         style={{ width: STAGE, height: s(0.5622) }}
       >
         <p

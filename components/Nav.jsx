@@ -32,9 +32,10 @@ import { s } from "@/lib/stage";
 // linkProps() in lib/links.js, which does this for outbound URLs.
 const PAGES = [
   { href: "/", label: "Home", ready: true },
-  { href: "/about", label: "About", ready: true },
+  { href: "/music", label: "Music", ready: true },
   { href: "/events", label: "Events", ready: false },
   { href: "/hire", label: "Hire", ready: false },
+  { href: "/about", label: "About", ready: true },
 ];
 
 export default function Nav() {
@@ -46,6 +47,31 @@ export default function Nav() {
   // as a link it points at the page you're already on. Other pages need
   // it, both as identity and as the way back.
   const showWordmark = pathname !== "/";
+
+  // The band fades in once you've scrolled off the top of the page.
+  //
+  // An always-on band solved the contrast problem but created a worse one:
+  // being fixed, it covered whatever sat at the top of each page — the
+  // Music header, the About speaker stack, and the medallion's top edge on
+  // Home, which we'd just gone to the trouble of uncropping. Every page
+  // would have needed its own clearance, and each new route would need
+  // another.
+  //
+  // Tying it to scroll removes that entirely: on arrival the nav is bare
+  // over artwork designed to be seen, exactly as the original brief
+  // wanted, and the band only exists once there's content passing
+  // underneath — which is also the only time contrast is unpredictable.
+  //
+  // 24px rather than 0 so a stray pixel of scroll doesn't flicker it on.
+  // passive: true because this listener never calls preventDefault, and
+  // saying so lets the browser scroll without waiting on it.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll(); // catch a restored scroll position on load
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close on navigation. Without this the drawer stays open over the new
   // page, because a client-side route change doesn't remount the nav.
@@ -75,23 +101,53 @@ export default function Nav() {
   return (
     <>
       <nav className="pointer-events-none fixed inset-x-0 top-0 z-50">
+        {/* THE BONE BAND.
+            The nav ink is earth, which worked while every page opened on
+            bone. Over Events and Merch (both charcoal) it disappeared —
+            and `mix-blend-multiply`, which had been giving the type a
+            printed-into-the-paper quality on light grounds, made it
+            worse: multiplying earth against charcoal drives it to
+            near-black on dark grey. The blend mode is gone from the links
+            and wordmark for that reason.
+
+            A band solves it without any moving parts — no scroll
+            listener, no per-section colour registry, nothing to break
+            when a section is added or reordered. And it costs nothing
+            where the original "keep the nav slight" reasoning applied:
+            the Hero ground is bone, so a bone band over it is invisible.
+            It only appears over the darker bands, which is exactly where
+            it's wanted.
+
+            90% rather than opaque, with the paper texture, so it reads as
+            a strip of the same stock as the rest of the site rather than
+            a UI chrome bar. inset-0 works because <nav> is fixed with
+            auto height, so the band is exactly as tall as whichever bar
+            is currently displayed. */}
+        <div
+          aria-hidden="true"
+          className={`paper absolute inset-0 bg-bone transition-opacity duration-300 ${
+            scrolled ? "opacity-90" : "opacity-0"
+          }`}
+        />
+
         {/* Mobile bar. Previously wrapped in `display: contents` so it
             could share the nav's own flex row — that broke the menu
             button. `display: contents` removes the element's box, and
             browsers have long-standing bugs where descendants then drop
             out of the accessibility tree and stop receiving events. Not
             worth the saved div. */}
-        <div className="pointer-events-auto flex items-center justify-between px-5 pt-4 md:hidden">
+        <div className="pointer-events-auto relative flex items-center justify-between px-5 pb-3 pt-4 md:hidden">
           {showWordmark ? <Wordmark className="text-base" /> : <span />}
           <MenuButton open={open} onClick={() => setOpen(true)} />
         </div>
 
         <div
-          className="hidden items-center justify-between md:flex"
+          className="relative hidden items-center justify-between md:flex"
           style={{
             paddingLeft: s(0.055),
             paddingRight: s(0.055),
             paddingTop: s(0.014),
+            paddingBottom: s(0.014),
           }}
         >
           {showWordmark ? <Wordmark style={{ fontSize: s(0.0125) }} /> : <span />}
@@ -151,7 +207,7 @@ function Wordmark({ className = "", style, full = false }) {
   return (
     <Link
       href="/"
-      className={`font-display pointer-events-auto uppercase leading-none tracking-[0.08em] text-earth mix-blend-multiply transition-opacity hover:opacity-70 ${className}`}
+      className={`font-display pointer-events-auto uppercase leading-none tracking-[0.08em] text-earth transition-opacity hover:opacity-70 ${className}`}
       style={style}
     >
       {full ? "Umojah Sound System" : "Umojah"}
@@ -168,7 +224,7 @@ function MenuButton({ open, onClick }) {
       aria-expanded={open}
       aria-controls="mobile-nav"
       // 48px square: the tap area is the point, even though the glyph
-      // inside it is small. No mix-blend-multiply and no negative margin
+      // inside it is small. No and no negative margin
       // here — both were cosmetic, and both are the kind of thing that
       // muddies a hit-testing problem when you're trying to isolate one.
       className="pointer-events-auto relative z-50 flex h-12 w-12 items-center justify-center text-earth"
@@ -194,7 +250,7 @@ function DesktopLink({ page, pathname }) {
   const active = pathname === href;
 
   const base =
-    "font-body uppercase tracking-[0.2em] text-earth mix-blend-multiply";
+    "font-body uppercase tracking-[0.2em] text-earth";
 
   if (!ready) {
     return (

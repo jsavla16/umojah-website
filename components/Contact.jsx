@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { STAGE, s } from "@/lib/stage";
-import { SOCIAL } from "@/lib/links";
+import { SOCIAL, whatsappLink } from "@/lib/links";
 
 // Home / 1.5 Contact — "Book Umojah".
 //
@@ -82,8 +82,7 @@ function Label({ htmlFor, children }) {
   return (
     <label
       htmlFor={htmlFor}
-      className="font-body block font-bold uppercase tracking-[0.2em] text-bone"
-      style={{ fontSize: s(FIELD.label), marginBottom: s(0.005) }}
+      className="c-label font-body block font-bold uppercase tracking-[0.2em] text-bone"
     >
       {children}
     </label>
@@ -91,7 +90,7 @@ function Label({ htmlFor, children }) {
 }
 
 const fieldClass =
-  "font-body w-full rounded-md border-2 border-earth bg-bone text-earth placeholder:text-earth/50 focus:outline-none focus:ring-2 focus:ring-gold";
+  "c-field font-body w-full rounded-md border-2 border-earth bg-bone text-earth placeholder:text-earth/50 focus:outline-none focus:ring-2 focus:ring-gold";
 
 export default function Contact() {
   const [service, setService] = useState("general");
@@ -132,19 +131,50 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="paper relative bg-terracotta">
+    // The custom properties below hand the desktop measurements to CSS.
+    // They can't be applied to the elements directly: inline styles beat
+    // classes, so a --stage fraction set inline would win at every width
+    // and mobile could never override it. Passing them down as properties
+    // and consuming them inside a min-width media query inverts that —
+    // see the CONTACT SECTION block in globals.css.
+    <section
+      id="contact"
+      className="paper relative bg-terracotta px-5 py-10 md:p-0"
+      style={{
+        "--c-stage-w": STAGE,
+        "--c-stage-h": s(0.5622),
+        "--c-eyebrow": s(0.0132),
+        "--c-title": s(0.029),
+        "--c-blurb": s(0.0136),
+        "--c-blurb-w": s(0.5),
+        "--c-label": s(FIELD.label),
+        "--c-label-mb": s(0.005),
+        "--c-field-h": s(FIELD.height),
+        "--c-field-f": s(FIELD.font),
+        "--c-field-p": s(0.012),
+        "--c-textarea-h": s(0.075),
+        "--c-form-w": s(0.52),
+        "--c-gap": s(0.018),
+        "--c-actions-mt": s(0.022),
+        "--c-actions-gap": s(0.016),
+        "--c-submit-h": s(0.0406),
+        "--c-submit-f": s(0.0105),
+        "--c-submit-p": s(0.03),
+        "--c-status-f": s(0.0105),
+        "--c-social-gap": s(0.018),
+        "--c-social-f": s(0.0092),
+        "--c-social-icon": s(0.0165),
+      }}
+    >
       {/* Anchor targets for the three Services CTAs */}
       {SERVICES.map(({ id }) => (
         <span key={id} id={`contact-${id}`} className="block" />
       ))}
 
-      <div
-        className="relative mx-auto"
-        style={{ width: STAGE, height: s(0.5622) }}
-      >
+      <div className="c-stage relative mx-auto">
         <p
-          className="font-body absolute inset-x-0 text-center font-bold uppercase tracking-[0.3em] text-bone"
-          style={{ top: s(0.0247), fontSize: s(0.0132) }}
+          className="c-eyebrow font-body text-center font-bold uppercase tracking-[0.3em] text-bone md:absolute md:inset-x-0"
+          style={{ top: s(0.0247) }}
         >
           Get in Touch
         </p>
@@ -156,7 +186,7 @@ export default function Contact() {
           <div
             key={left}
             aria-hidden="true"
-            className="absolute -translate-y-1/2"
+            className="absolute hidden -translate-y-1/2 md:block"
             style={{
               left: s(left),
               top: s(0.0564),
@@ -174,10 +204,9 @@ export default function Contact() {
         ))}
 
         <h2
-          className="font-display absolute inset-x-0 whitespace-nowrap text-center uppercase leading-none tracking-[0.04em] text-sand"
+          className="c-title font-display whitespace-nowrap text-center uppercase leading-none tracking-[0.04em] text-sand md:absolute md:inset-x-0"
           style={{
             top: s(0.0415),
-            fontSize: s(0.029),
             WebkitTextStrokeWidth: "0.035em",
             WebkitTextStrokeColor: "var(--color-earth)",
             paintOrder: "stroke fill",
@@ -187,8 +216,8 @@ export default function Contact() {
         </h2>
 
         <p
-          className="font-body absolute left-1/2 -translate-x-1/2 text-center text-bone"
-          style={{ top: s(0.088), width: s(0.5), fontSize: s(0.0136) }}
+          className="c-blurb font-body text-center text-bone md:absolute md:left-1/2 md:-translate-x-1/2"
+          style={{ top: s(0.088) }}
         >
           Festivals &middot; Club nights &middot; Residencies &middot; Custom
           builds &middot; Private events &mdash; across East Africa and beyond.
@@ -196,10 +225,10 @@ export default function Contact() {
 
         <form
           onSubmit={onSubmit}
-          className="absolute left-1/2 -translate-x-1/2"
-          style={{ top: s(0.128), width: s(0.52) }}
+          className="c-form md:absolute md:left-1/2 md:-translate-x-1/2"
+          style={{ top: s(0.128) }}
         >
-          <div className="grid grid-cols-2" style={{ gap: s(0.018) }}>
+          <div className="c-grid grid grid-cols-1 md:grid-cols-2">
             <div>
               <Label htmlFor="name">Name</Label>
               <input
@@ -208,12 +237,6 @@ export default function Contact() {
                 required
                 placeholder="Your name"
                 className={fieldClass}
-                style={{
-                  height: s(FIELD.height),
-                  fontSize: s(FIELD.font),
-                  paddingLeft: s(0.012),
-                  paddingRight: s(0.012),
-                }}
               />
             </div>
             <div>
@@ -225,12 +248,6 @@ export default function Contact() {
                 required
                 placeholder="you@email.com"
                 className={fieldClass}
-                style={{
-                  height: s(FIELD.height),
-                  fontSize: s(FIELD.font),
-                  paddingLeft: s(0.012),
-                  paddingRight: s(0.012),
-                }}
               />
             </div>
 
@@ -242,12 +259,6 @@ export default function Contact() {
                 value={service}
                 onChange={(e) => setService(e.target.value)}
                 className={fieldClass}
-                style={{
-                  height: s(FIELD.height),
-                  fontSize: s(FIELD.font),
-                  paddingLeft: s(0.012),
-                  paddingRight: s(0.012),
-                }}
               >
                 {SERVICES.map(({ id, label }) => (
                   <option key={id} value={id}>
@@ -264,12 +275,6 @@ export default function Contact() {
                 defaultValue=""
                 disabled={months.length === 0}
                 className={fieldClass}
-                style={{
-                  height: s(FIELD.height),
-                  fontSize: s(FIELD.font),
-                  paddingLeft: s(0.012),
-                  paddingRight: s(0.012),
-                }}
               >
                 <option value="">Not sure yet</option>
                 {months.map(({ value, label }) => (
@@ -281,60 +286,64 @@ export default function Contact() {
             </div>
           </div>
 
-          <div style={{ marginTop: s(0.018) }}>
+          <div className="c-mt">
             <Label htmlFor="venue">Location / Venue</Label>
             <input
               id="venue"
               name="venue"
               placeholder="City and venue"
               className={fieldClass}
-              style={{
-                height: s(FIELD.height),
-                fontSize: s(FIELD.font),
-                paddingLeft: s(0.012),
-                paddingRight: s(0.012),
-              }}
             />
           </div>
 
-          <div style={{ marginTop: s(0.018) }}>
+          <div className="c-mt">
             <Label htmlFor="message">Tell us more</Label>
             <textarea
               id="message"
               name="message"
               placeholder="Expected attendance, brief, budget range…"
-              className={`${fieldClass} resize-none`}
-              style={{
-                height: s(0.075),
-                fontSize: s(FIELD.font),
-                padding: s(0.012),
-              }}
+              className={`${fieldClass} c-textarea resize-none`}
             />
           </div>
 
           <div
-            className="flex items-center justify-center"
-            style={{ marginTop: s(0.022), gap: s(0.016) }}
+            className="c-actions flex flex-col items-center justify-center md:flex-row"
           >
             <button
               type="submit"
               disabled={status === "sending"}
-              className="font-display flex items-center justify-center whitespace-nowrap rounded-full border-2 border-earth bg-earth uppercase tracking-[0.1em] text-bone transition-colors hover:bg-black disabled:opacity-60"
-              style={{
-                height: s(0.0406),
-                fontSize: s(0.0105),
-                paddingLeft: s(0.03),
-                paddingRight: s(0.03),
-              }}
+              className="c-submit font-display flex items-center justify-center whitespace-nowrap rounded-full border-2 border-earth bg-earth uppercase tracking-[0.1em] text-bone transition-colors hover:bg-black disabled:opacity-60"
             >
               {status === "sending" ? "Sending…" : "Send Enquiry"}
             </button>
 
+            {/* Direct chat, not the community group.
+                Given equal billing rather than treated as a footnote: this
+                is a negotiating market, people want a person before a
+                price, and a form that promises a reply later serves a
+                different temperament from a conversation that starts now.
+
+                The message is prefilled so enquiries arrive pre-labelled —
+                the same number handles hire, builds and everything else,
+                and knowing which before you open the thread is worth the
+                few extra characters in the URL. */}
+            {whatsappLink() && (
+              <a
+                href={whatsappLink(
+                  "Hi Umojah — I'd like to talk about an enquiry from your website.",
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="c-submit font-display flex items-center justify-center whitespace-nowrap rounded-full border-2 border-earth bg-bone uppercase tracking-[0.1em] text-earth transition-colors hover:bg-sand"
+              >
+                Chat on WhatsApp
+              </a>
+            )}
+
             <p
               role="status"
               aria-live="polite"
-              className="font-body text-bone"
-              style={{ fontSize: s(0.0105) }}
+              className="c-status font-body text-bone"
             >
               {status === "sent" && "Thanks — we'll be in touch."}
               {status === "error" && `Couldn't send: ${error}`}
@@ -349,12 +358,11 @@ export default function Contact() {
             treatment (embedded feeds and so on) is a later decision. */}
         {SOCIALS.length > 0 && (
           <div
-            className="absolute inset-x-0 flex items-center justify-center"
-            style={{ bottom: s(0.026), gap: s(0.018) }}
+            className="c-social flex items-center justify-center md:absolute md:inset-x-0"
+            style={{ bottom: s(0.026) }}
           >
             <span
-              className="font-body font-bold uppercase tracking-[0.3em] text-bone/70"
-              style={{ fontSize: s(0.0092) }}
+              className="c-social-label font-body font-bold uppercase tracking-[0.3em] text-bone/70"
             >
               Follow
             </span>
@@ -371,7 +379,7 @@ export default function Contact() {
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   aria-hidden="true"
-                  style={{ width: s(0.0165), height: s(0.0165) }}
+                  className="c-social-icon"
                 >
                   <path d={path} />
                 </svg>

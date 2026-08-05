@@ -1,6 +1,7 @@
 import { SITE } from "@/lib/site";
 import { CONTACT } from "@/lib/links";
 import { HIRE_CATEGORIES } from "@/lib/equipment";
+import { structuredDataEvents, TICKETS_URL, VENUE } from "@/lib/events";
 
 // JSON-LD structured data.
 //
@@ -20,6 +21,38 @@ import { HIRE_CATEGORIES } from "@/lib/equipment";
 // approach.
 
 export default function StructuredData() {
+  // Nairobi Dub Club sessions, but ONLY the confirmed ones — see the note
+  // at the top of lib/events.js. This is the piece none of the sound-hire
+  // competitors can match, because none of them run a venue night: events
+  // are eligible for Google's event experiences, which sit above ordinary
+  // results.
+  const events = structuredDataEvents().map((event) => ({
+    "@type": "Event",
+    "@id": `${SITE.url}/#${event.id}`,
+    name: `Nairobi Dub Club — Session ${event.session}`,
+    startDate: event.startDate,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    image: `${SITE.url}/images/events/ndc-september-2026.png`,
+    location: {
+      "@type": "Place",
+      name: VENUE.name,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: VENUE.name,
+        addressLocality: VENUE.locality,
+        addressCountry: VENUE.country,
+      },
+    },
+    performer: { "@id": `${SITE.url}/#band` },
+    organizer: { "@id": `${SITE.url}/#band` },
+    offers: {
+      "@type": "Offer",
+      url: TICKETS_URL,
+      availability: "https://schema.org/InStock",
+    },
+  }));
+
   const graph = [
     {
       "@type": "MusicGroup",
@@ -99,6 +132,7 @@ export default function StructuredData() {
         ],
       },
     },
+    ...events,
   ];
 
   return (

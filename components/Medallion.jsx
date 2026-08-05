@@ -1,5 +1,17 @@
 import Image from "next/image";
-import medallion from "@/public/images/hero/medallion-crop.png";
+// The uncropped original, not medallion-crop.png.
+//
+// The crop took 51px off the top (534x772 -> 534x721) to match the
+// artboard, where the badge runs off the top of the page frame. Revealing
+// it again makes the image 7% taller, and since it's anchored by its top
+// edge, everything inside moves DOWN by that 51px — about 79px at the
+// desktop size. That's most of the downward shift on its own.
+//
+// It also invalidates every vertical mark below, because they're
+// percentages of the image's HEIGHT. Each was reconverted as
+// (old% x 721 + 51) / 772. The horizontal marks and both font sizes are
+// fractions of WIDTH, which didn't change, so they're untouched.
+import medallion from "@/public/images/hero/medallion.png";
 import stackLogo from "@/public/images/hero/stack-logo-trim.svg";
 
 // The beaded medallion badge and the three things inside its ring.
@@ -52,7 +64,7 @@ export default function Medallion({
       />
 
       {/* --- Contents of the ring's hollow -----------------------------
-          The hollow is a circle: centre 49.8%/28.6% of the medallion
+          The hollow is a circle: centre 49.8%/33.3% of the medallion
           image, radius 26.6% of its width. It is a tight fit — in the
           mockup UMOJAH spans almost the full inner diameter — so each
           element is positioned absolutely at its measured mark rather
@@ -68,7 +80,7 @@ export default function Medallion({
       {/* Speaker stack — cap top 23.05% of medallion width */}
       <div
         className="absolute -translate-x-1/2"
-        style={{ left: "50%", top: "14.80%", width: "25.43%" }}
+        style={{ left: "50%", top: "20.43%", width: "25.43%" }}
       >
         <Image src={stackLogo} alt="" className="h-auto w-full" />
       </div>
@@ -78,7 +90,7 @@ export default function Medallion({
           mockup's own wordmark is within ~1px of touching). */}
       <h1
         className="font-display absolute inset-x-0 text-center uppercase leading-none tracking-[0.04em] text-earth"
-        style={{ top: "34.24%", fontSize: m(0.0789) }}
+        style={{ top: "38.58%", fontSize: m(0.0789) }}
       >
         Umojah
       </h1>
@@ -90,7 +102,7 @@ export default function Medallion({
       <p
         className="font-heading absolute inset-x-0 text-center uppercase leading-none tracking-[0.16em] text-earth"
         style={{
-          top: "40.31%",
+          top: "44.25%",
           fontSize: m(0.0321),
           WebkitTextStrokeWidth: "0.055em",
           WebkitTextStrokeColor: "var(--color-gold)",

@@ -97,7 +97,7 @@ export default function Hero() {
             here. `calc(100vw - 32px)` is the section's px-4 gutters. */}
         <Medallion
           width="calc(100vw - 32px)"
-          className="relative mx-auto"
+          className="relative mx-auto mt-6"
           priority
         />
 
@@ -148,14 +148,22 @@ export default function Hero() {
           />
         </div>
 
-        {/* Medallion — top already cropped in the asset; overflows the
-            bottom of the hero so the tassels run into the Music section.
-            z-10 keeps it above Music's terracotta background, which would
-            otherwise paint over it since Music comes later in the DOM. */}
+        {/* Medallion — now the uncropped asset, so the top of the badge is
+            visible instead of running off the page frame. It overflows the
+            bottom of the hero so the tassels run on into the section
+            below; z-10 keeps it above that section's background, which
+            would otherwise paint over it since it comes later in the DOM.
+
+            `top` is the single knob for vertical position. It replaced
+            `top-0`, which pinned the badge flush to the band. Note the
+            uncrop already moved the ring down ~79px on its own, by adding
+            51 asset-pixels above it — so this offset is deliberately
+            small. Raise it toward s(0.02) for more, or set it to 0 and let
+            the uncrop do all the work. */}
         <Medallion
           width={s(0.6018)}
-          className="absolute top-0 z-10"
-          style={{ left: "19.29%" }}
+          className="absolute z-10"
+          style={{ left: "19.29%", top: s(0.005) }}
           priority
         />
 
