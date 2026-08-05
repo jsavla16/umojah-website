@@ -47,6 +47,13 @@ function ShukaEdge({ side, backgroundColor, width, patternHeight }) {
   return (
     <div
       aria-hidden="true"
+      // Desktop only. At phone width the border resolves to a ~10px strip
+      // (2.71vw), which crops the shuka pattern down to a sliver of noise
+      // rather than a recognisable check — it stopped reading as the motif
+      // and just ate horizontal space that mobile has none of. Hiding it
+      // also drops two masked PNGs from the mobile payload, on the
+      // connections most likely to be metered.
+      className="hidden md:block"
       style={{
         position: "fixed",
         top: 0,
