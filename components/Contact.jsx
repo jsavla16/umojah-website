@@ -228,6 +228,29 @@ export default function Contact() {
           className="c-form md:absolute md:left-1/2 md:-translate-x-1/2"
           style={{ top: s(0.128) }}
         >
+          {/* Honeypot. Invisible to people, visible to bots — they fill
+              every field they find, so anything arriving with this set is
+              automated and gets binned quietly by the route.
+
+              Not `type="hidden"`: that's the first thing a scraper skips.
+              A real text input, hidden with CSS, catches more.
+
+              tabIndex={-1} keeps it out of keyboard navigation and
+              autoComplete="off" stops browsers helpfully filling it in —
+              either would otherwise turn a real visitor into a "bot".
+
+              The route tests this field's VALUE, not its presence. It sends
+              empty for every human, and reading that as a bot signal is
+              what silently broke the subscribe form on 7 Aug. */}
+          <input
+            type="text"
+            name="_hp"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="pointer-events-none absolute h-0 w-0 opacity-0"
+          />
+
           <div className="c-grid grid grid-cols-1 md:grid-cols-2">
             <div>
               <Label htmlFor="name">Name</Label>
