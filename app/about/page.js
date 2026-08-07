@@ -5,6 +5,7 @@ import NavClearance from "@/components/NavClearance";
 import SoundSystem from "@/components/SoundSystem";
 import Crew from "@/components/Crew";
 import Collaborations from "@/components/Collaborations";
+import { OG_DEFAULTS } from "@/lib/site";
 
 // The title picks up the layout's template, rendering as
 // "About Us · Umojah Sound System".
@@ -14,6 +15,7 @@ export const metadata = {
     "Kenya's first and only traditional reggae/dub sound system. Hand-built in Nairobi since 2016 — the stack, the crew, and the festivals and artists we've shared it with.",
   alternates: { canonical: "/about" },
   openGraph: {
+    ...OG_DEFAULTS,
     title: "About Umojah Sound System",
     description:
       "Hand-built in Nairobi since 2016. The stack, the crew, and the festivals and artists we've shared it with.",

@@ -3,6 +3,7 @@ import warriorLeft from "@/public/images/hero/warrior-left-trim.png";
 import warriorRight from "@/public/images/hero/warrior-right-trim.png";
 import Medallion from "@/components/Medallion";
 import { HERO_STAGE as STAGE, stageFraction } from "@/lib/stage";
+import Link from "next/link";
 
 // Home / 1.1 Hero.
 //
@@ -50,9 +51,30 @@ import { HERO_STAGE as STAGE, stageFraction } from "@/lib/stage";
 const s = stageFraction(STAGE);
 
 // Desktop: positioned on the stage, sized as a fraction of it.
+// Anchors stay plain <a>; routes go through next/link.
+//
+// The Hero buttons used to be two same-page anchors. Music has since moved
+// to its own route, so "#music" scrolled to nothing — a click with no
+// response at all, which reads as a broken site rather than a broken link.
+//
+// Picking the element from the href means the next time a target moves,
+// changing the href is the whole change. A hardcoded <a href="/music">
+// would work too, but would force a full page reload instead of a
+// client-side navigation.
+function Control({ href, className, style, children }) {
+  const isAnchor = href.startsWith("#");
+  const Tag = isAnchor ? "a" : Link;
+
+  return (
+    <Tag href={href} className={className} style={style}>
+      {children}
+    </Tag>
+  );
+}
+
 function StageButton({ href, label, centre }) {
   return (
-    <a
+    <Control
       href={href}
       className="font-display absolute z-20 flex -translate-x-1/2 items-center justify-center rounded-md border-2 border-earth bg-bone uppercase tracking-[0.1em] text-earth transition-colors hover:bg-earth hover:text-bone"
       style={{
@@ -64,7 +86,7 @@ function StageButton({ href, label, centre }) {
       }}
     >
       {label}
-    </a>
+    </Control>
   );
 }
 
@@ -73,12 +95,12 @@ function StageButton({ href, label, centre }) {
 // proportion of the artwork.
 function TapButton({ href, label }) {
   return (
-    <a
+    <Control
       href={href}
       className="font-display flex h-12 flex-1 items-center justify-center rounded-md border-2 border-earth bg-bone text-sm uppercase tracking-[0.1em] text-earth"
     >
       {label}
-    </a>
+    </Control>
   );
 }
 
@@ -109,7 +131,7 @@ export default function Hero() {
             carry the motif on desktop and elsewhere on the site. */}
         <div className="flex gap-3 pb-10 pt-3">
           <TapButton href="#services" label="Services" />
-          <TapButton href="#music" label="Music" />
+          <TapButton href="/music" label="Music" />
         </div>
       </div>
 
@@ -168,7 +190,7 @@ export default function Hero() {
         />
 
         <StageButton href="#services" label="Services" centre="12.72%" />
-        <StageButton href="#music" label="Music" centre="87.28%" />
+        <StageButton href="/music" label="Music" centre="87.28%" />
       </div>
     </section>
   );

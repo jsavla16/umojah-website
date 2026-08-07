@@ -8,6 +8,7 @@ import Events from "@/components/Events";
 import Services from "@/components/Services";
 import Merch from "@/components/Merch";
 import Contact from "@/components/Contact";
+import { OG_DEFAULTS } from "@/lib/site";
 
 // Home had no metadata at all until now — it inherited the layout's
 // defaults, which meant the page most likely to rank had no description
@@ -20,6 +21,7 @@ export const metadata = {
     "Kenya's first traditional reggae and dub sound system. Hire the rig for your event, book the full session with selektors and MCs, or commission a custom build for your venue.",
   alternates: { canonical: "/" },
   openGraph: {
+    ...OG_DEFAULTS,
     title: "Umojah Sound System · Sound System Hire & Custom Builds, Nairobi",
     description:
       "Kenya's first traditional reggae and dub sound system, hand-built in Nairobi. Hire the rig, book the session, or commission a custom build.",
