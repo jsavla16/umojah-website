@@ -135,6 +135,62 @@ Submit a real enquiry and confirm:
 
 ---
 
+## Umojah Records mailing list
+
+The subscribe field in the Music section posts to `app/api/subscribe/route.js`,
+which adds the address to a **Resend Audience** — same account and same API
+key as the contact form, so no new vendor and no new dependency.
+
+### One-time setup
+
+1. Go to <https://resend.com/audiences> and create an audience (call it
+   something like *Umojah Records*).
+2. Copy its ID.
+3. Add `UMOJAH_RECORDS_AUDIENCE_ID` to `.env.local` **and** to Vercel (Production,
+   Preview and Development), then **redeploy** — Vercel only picks up
+   environment changes on a new build.
+
+It isn't a secret, so unlike the API key it can live in `.env.local`.
+
+Until it's set the form returns *"Signups aren't set up yet"* rather than
+failing silently, and the route logs which variable is missing.
+
+### Behaviour worth knowing
+
+- **Re-subscribing isn't an error.** Resend rejects a duplicate contact;
+  the route catches that and returns success. Telling someone their second
+  attempt failed invites a third, and they're already on the list.
+- `unsubscribed: false` is sent explicitly. Without it a contact can land
+  in an unsubscribed state and never receive anything.
+- There's a honeypot field, as on the contact form.
+
+- **Consent wording is shown under the button**, not buried in a policy:
+  *"New music from Umojah Records and event news, roughly once a month.
+  Unsubscribe any time."* It's replaced by the status message once someone
+  subscribes, so the layout doesn't shift under a click.
+
+### Watch out for
+
+**An audience ID is not an API key.** Both are 36 characters, which caught
+us out on 7 Aug. The difference:
+
+| | |
+|---|---|
+| API key | starts `re_`, no hyphens, from resend.com/api-keys |
+| Audience ID | a UUID with four hyphens, e.g. `d6a4f02c-2a50-...` |
+
+The reliable place to find the audience ID is the **browser address bar**
+when you open the audience — the URL ends in it. If the value you're
+copying begins with `re_`, you're on the API Keys page.
+
+### Still to do
+
+- **Unsubscribe.** Resend handles the mechanics for broadcasts, so this is
+  largely a matter of using its unsubscribe token when the first campaign
+  goes out rather than anything the site needs.
+
+---
+
 ## SEO
 
 ### Where things live
