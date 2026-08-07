@@ -28,9 +28,21 @@ export async function POST(request) {
 
   const { email, ...rest } = body;
 
-  // Honeypot: bots fill hidden fields humans never see. Answer OK so they
-  // don't learn anything from the response.
-  if (Object.keys(rest).some((key) => key.startsWith("_"))) {
+  // Honeypot: bots fill hidden fields humans never see.
+  //
+  // TEST THE VALUE, NOT THE KEY. The first version asked whether a field
+  // starting with "_" was PRESENT — but the form always sends `_hp`, empty
+  // for a real person. So every submission looked like a bot, returned OK
+  // without ever calling Resend, and the site cheerfully told people they
+  // were on a list they'd never been added to. A silent success is a much
+  // worse failure than a loud error.
+  //
+  // Answer OK rather than an error so a real bot learns nothing from the
+  // response.
+  const looksLikeABot = Object.entries(rest).some(
+    ([key, value]) => key.startsWith("_") && String(value ?? "").trim() !== "",
+  );
+  if (looksLikeABot) {
     return Response.json({ ok: true });
   }
 

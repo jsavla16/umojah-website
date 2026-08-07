@@ -34,7 +34,18 @@ export async function POST(request) {
   const { name, email, service, date, venue, message, ...rest } = body;
 
   // Honeypot: bots fill hidden fields humans never see.
-  if (Object.keys(rest).some((k) => k.startsWith("_"))) {
+  //
+  // Tests the VALUE, not the presence of the key. Testing presence blocked
+  // every submission on the subscribe route, because that form always
+  // sends its honeypot field, empty for a human.
+  //
+  // NOTE: this check is currently dormant — components/Contact.jsx doesn't
+  // render a honeypot field, so nothing beginning with "_" ever arrives.
+  // The guard is right; the form is missing its half of the bargain.
+  const looksLikeABot = Object.entries(rest).some(
+    ([key, value]) => key.startsWith("_") && String(value ?? "").trim() !== "",
+  );
+  if (looksLikeABot) {
     return Response.json({ ok: true });
   }
 
