@@ -6,6 +6,7 @@ import vinyl from "@/public/images/music/vinyl-trim.png";
 import arrowLeft from "@/public/images/music/arrow-left-trim.png";
 import { STAGE, s } from "@/lib/stage";
 import { STREAMING, linkProps } from "@/lib/links";
+import SubscribeForm from "@/components/SubscribeForm";
 
 // Home / 1.2 New Music & DJ Sets — "Groove to the Beat".
 //
@@ -262,24 +263,7 @@ function MobileMusic() {
           when it drops.
         </p>
 
-        <form className="mt-6">
-          <label htmlFor="records-email-mobile" className="sr-only">
-            Email address
-          </label>
-          <input
-            id="records-email-mobile"
-            type="email"
-            required
-            placeholder="your@email.com"
-            className="font-display h-12 w-full rounded-full border-2 border-earth bg-bone text-center text-xs uppercase tracking-[0.1em] text-earth placeholder:text-earth/60 focus:outline-none focus:ring-2 focus:ring-gold"
-          />
-          <button
-            type="submit"
-            className="font-display mt-3 flex h-12 w-full items-center justify-center rounded-full border-2 border-earth bg-terracotta text-xs uppercase tracking-[0.1em] text-bone"
-          >
-            Subscribe
-          </button>
-        </form>
+        <SubscribeForm variant="mobile" />
       </div>
     </div>
   );
@@ -446,38 +430,7 @@ export default function Music() {
           when it drops.
         </p>
 
-        <form className="contents">
-          <label htmlFor="records-email" className="sr-only">
-            Email address
-          </label>
-          <input
-            id="records-email"
-            type="email"
-            required
-            placeholder="your@email.com"
-            className="font-display absolute -translate-x-1/2 rounded-full border-2 border-earth bg-bone text-center uppercase tracking-[0.1em] text-earth placeholder:text-earth/60 focus:outline-none focus:ring-2 focus:ring-gold"
-            style={{
-              left: s(0.7724),
-              top: s(0.4462),
-              width: s(0.1395),
-              height: s(0.0377),
-              fontSize: s(0.0105),
-            }}
-          />
-          <Pill
-            submit
-            filled
-            style={{
-              left: s(0.7724),
-              top: s(0.4898),
-              width: s(0.1318),
-              height: s(0.0381),
-              transform: "translateX(-50%)",
-            }}
-          >
-            Subscribe
-          </Pill>
-        </form>
+        <SubscribeForm variant="desktop" />
       </div>
     </section>
   );

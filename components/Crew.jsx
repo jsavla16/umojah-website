@@ -120,11 +120,75 @@ function Member({ member }) {
   );
 }
 
+const STANDFIRST =
+  "Kenya's first and only traditional reggae/dub sound system. 20 years in the making, built from the ground up in Nairobi. Three people. One mission — propagate sound system culture across East Africa.";
+
+// MOBILE — the three columns become three stacked entries.
+//
+// The desktop band sets the crew side by side, each column 25.6% wide. At
+// 414px that's ~106px per person, which is what made this section read as
+// condensed. Stacked, each entry gets the full column width.
+//
+// Two changes from the desktop composition, both taken from the artboard:
+//
+//   1. The header block keeps the terracotta ground, but the crew list
+//      moves onto bone. On desktop it's one terracotta band; on mobile the
+//      artboard splits it, which gives the three bios a lighter ground to
+//      sit on and stops a very long scroll of reversed-out type.
+//   2. The centred header rules are dropped. They frame a wide centred
+//      heading; against a left-aligned 414px column they'd just be two
+//      stray lines.
+//
+// Role pill, name and bio are all left-aligned here. Desktop deliberately
+// mixes left-aligned names with centred bios — that reads as hand-set at
+// column width, but as a mistake in a single column.
+function MobileCrew() {
+  return (
+    <div className="md:hidden">
+      {/* Header — stays on terracotta, under the bleeding speaker stack */}
+      <div className="relative z-20 px-5 pb-8 pt-6">
+        <h2 className="font-heading text-xl uppercase leading-none tracking-[0.02em] text-bone">
+          The Crew
+        </h2>
+        {/* Inter, sentence case — not the desktop's Nord uppercase. The
+            artboard changes it deliberately: Nord is a display face, and
+            four lines of it uppercase at phone width is hard work. Desktop
+  C          sets this as two short centred lines, where it reads as a
+            standfirst rather than a paragraph. */}
+        <p className="font-body mt-3 text-[0.95rem] leading-relaxed text-bone">
+          {STANDFIRST}
+        </p>
+      </div>
+
+      {/* The crew themselves, on bone */}
+      <div className="paper bg-bone px-5 pb-10 pt-8">
+        {CREW.map(({ id, role, name, bio }) => (
+          <div key={id} className="mb-8 last:mb-0">
+            <span className="font-body inline-flex items-center gap-2 rounded bg-earth px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.08em] text-bone">
+              {role[0]}
+              <span aria-hidden="true">&#9679;</span>
+              {role[1]}
+            </span>
+            <h3 className="font-display mt-2 text-2xl uppercase leading-none tracking-[0.02em] text-earth">
+              {name}
+            </h3>
+            <p className="font-body mt-2 text-[0.95rem] leading-relaxed text-earth">
+              {bio}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Crew() {
   return (
     <section id="crew" className="paper relative bg-terracotta">
+      <MobileCrew />
+
       <div
-        className="relative mx-auto"
+        className="relative mx-auto hidden md:block"
         style={{ width: STAGE, height: s(0.5622) }}
       >
         <Rule left={0.1244} width={0.2416} />
@@ -141,10 +205,7 @@ export default function Crew() {
           className="font-heading absolute left-1/2 z-20 -translate-x-1/2 text-center uppercase tracking-[0.06em] text-bone"
           style={{ top: s(0.1556), width: s(0.665), fontSize: s(0.013), lineHeight: 1.45 }}
         >
-          Kenya&rsquo;s first and only traditional reggae/dub sound system. 20
-          years in the making, built from the ground up in Nairobi. Three
-          people. One mission &mdash; propagate sound system culture across
-          East Africa.
+          {STANDFIRST}
         </p>
 
         {CREW.map((member) => (
