@@ -169,6 +169,29 @@ failing silently, and the route logs which variable is missing.
   Unsubscribe any time."* It's replaced by the status message once someone
   subscribes, so the layout doesn't shift under a click.
 
+### The honeypot bug — 7 Aug, fixed
+
+Worth remembering, because nothing looked wrong.
+
+The route checked whether a field starting with `_` was **present**, rather
+than whether it had a **value**. `SubscribeForm` always sends `_hp`, empty
+for a real person — so every submission was classified as a bot, returned
+`{ ok: true }` without ever calling Resend, and the site told people they
+were on a list they'd never joined.
+
+Symptoms: `POST 200` in the Vercel logs, "You're on the list" on screen, no
+error anywhere, and an empty audience. The clue was the *absence* of a
+`Resend rejected the contact:` line — a 200 with no error meant the code
+never reached Resend at all.
+
+Both routes now test the value. The lesson: a silent success is far worse
+than a loud failure, and would have gone unnoticed until the first
+campaign went out to nobody.
+
+**Still open:** `components/Contact.jsx` renders no honeypot field, so the
+guard in the contact route has nothing to catch. The check is right; the
+form is missing its half.
+
 ### Watch out for
 
 **An audience ID is not an API key.** Both are 36 characters, which caught
