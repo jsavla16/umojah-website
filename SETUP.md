@@ -188,9 +188,10 @@ Both routes now test the value. The lesson: a silent success is far worse
 than a loud failure, and would have gone unnoticed until the first
 campaign went out to nobody.
 
-**Still open:** `components/Contact.jsx` renders no honeypot field, so the
-guard in the contact route has nothing to catch. The check is right; the
-form is missing its half.
+Both forms now carry a honeypot field (`_hp`) and both routes test its
+value. The contact form's was added the same day — until then the guard
+existed in the route with nothing to catch, so that form had no bot
+protection at all despite appearing to.
 
 ### Watch out for
 
