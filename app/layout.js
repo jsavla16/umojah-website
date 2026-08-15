@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE } from "@/lib/site";
 
 // Loads Inter 400/500/700 from Google Fonts to complement the self-hosted
@@ -92,7 +93,13 @@ export default function RootLayout({ children }) {
     <html lang="en" className={interGoogle.variable}>
       <body>
         {children}
+        {/* Both sit at the end of <body> so they mount after the page
+            content and can't delay first paint. They render nothing
+            visible — Analytics counts page views, SpeedInsights reports
+            real-world loading metrics. Neither does anything in local
+            development; data only appears from deployed builds. */}
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
