@@ -6,6 +6,7 @@ import SoundSystem from "@/components/SoundSystem";
 import Crew from "@/components/Crew";
 import Collaborations from "@/components/Collaborations";
 import { OG_DEFAULTS } from "@/lib/site";
+import Footer from "@/components/Footer";
 
 // The title picks up the layout's template, rendering as
 // "About Us · Umojah Sound System".
@@ -36,6 +37,7 @@ export default function About() {
         <Crew />
         <Collaborations />
       </main>
+      <Footer />
       <ViewportBadge />
     </>
   );

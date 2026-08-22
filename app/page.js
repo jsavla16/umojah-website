@@ -9,6 +9,7 @@ import Services from "@/components/Services";
 import Merch from "@/components/Merch";
 import Contact from "@/components/Contact";
 import { OG_DEFAULTS } from "@/lib/site";
+import Footer from "@/components/Footer";
 
 // Home had no metadata at all until now — it inherited the layout's
 // defaults, which meant the page most likely to rank had no description
@@ -52,6 +53,7 @@ export default function Home() {
         <Merch />
         <Contact />
       </main>
+      <Footer />
       <ViewportBadge />
     </>
   );

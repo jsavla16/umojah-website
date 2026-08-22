@@ -4,6 +4,7 @@ import Nav from "@/components/Nav";
 import Music from "@/components/Music";
 import NavClearance from "@/components/NavClearance";
 import { OG_DEFAULTS } from "@/lib/site";
+import Footer from "@/components/Footer";
 
 // Music moved off the homepage and onto its own route.
 //
@@ -41,6 +42,7 @@ export default function MusicPage() {
         <NavClearance desktop={0.03} mobile={56} />
         <Music />
       </main>
+      <Footer />
       <ViewportBadge />
     </>
   );
