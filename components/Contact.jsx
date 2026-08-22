@@ -76,6 +76,14 @@ const SOCIALS = [
     href: SOCIAL.facebook,
     path: "M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z",
   },
+  {
+    id: "tiktok",
+    label: "TikTok",
+    path: "M16.6 5.82a4.28 4.28 0 01-1.03-2.72h-3.3v11.6a2.59 2.59 0 01-2.6 2.51 2.59 2.59 0 01-2.6-2.58 2.59 2.59 0 013.4-2.46V8.8a5.87 5.87 0 00-.8-.06A5.88 5.88 0 003.8 14.62a5.88 5.88 0 005.87 5.88 5.88 5.88 0 005.88-5.88V9.01a7.53 7.53 0 004.4 1.41V7.12a4.3 4.3 0 01-3.35-1.3z",
+    href: SOCIAL.tiktok,
+  },
+  // .filter keeps this array honest: a platform with no URL yet simply
+  // doesn't render, rather than becoming a dead icon.
 ].filter((item) => item.href);
 
 function Label({ htmlFor, children }) {

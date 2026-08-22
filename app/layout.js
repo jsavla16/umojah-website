@@ -58,11 +58,15 @@ export const metadata = {
     locale: "en_KE",
   },
 
+  // These tags stay even though the X account has been dropped from the
+  // site. They aren't a link to the account — they tell any platform that
+  // reads Twitter-card markup how to render a shared link, and several
+  // besides X do. `creator` is gone with the account; without a live
+  // profile to credit it would just point at an empty page.
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} · Reggae & Dub Sound System, Nairobi`,
     description: SITE.description,
-    creator: "@umojahsoundsyst",
   },
 
   robots: {
