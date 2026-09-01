@@ -1,6 +1,6 @@
 // Fixed left/right page borders built from the shuka check artwork.
 //
-// Source files: the client-supplied shuka-left.png / shuka-right.png are
+// Source files: the original shuka-left.png / shuka-right.png are
 // full 2732x1536 canvases where the pattern only occupies a narrow strip
 // down one edge — and the right-hand file's "background" is opaque white
 // rather than transparent, which silently broke the mask (an all-opaque

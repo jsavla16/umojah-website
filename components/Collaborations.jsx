@@ -57,12 +57,12 @@ const LIST = {
 // NOTE ON THE CONTENT, both worth a second look:
 //
 //   1. The artboard and brief both read "Black Chariot Inernational".
-//      Shortened to "Black Chariot" on the client's instruction, which
+//      Shortened to "Black Chariot" deliberately, which
 //      also disposes of the misspelling.
 //   2. "Long Fingah" appeared TWICE in the supplied list (after 10000
 //      Lions and again after Eva Lazurus). Listed once here — a repeat on
 //      a credits roll reads as an error rather than an emphasis. Confirmed
-//      by the client.
+//      and confirmed.
 const ARTISTS = [
   "King Shiloh",
   "Lidj Shiloh",

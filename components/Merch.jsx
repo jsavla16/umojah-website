@@ -22,7 +22,7 @@ import { merchHref, linkProps } from "@/lib/links";
 // and the design lines up their optical centres, not their boxes.
 //
 // Per the build brief these products are live and each needs a real
-// purchase URL from the client; `href` is a placeholder until those land.
+// purchase URL; `href` is a placeholder until those land.
 
 
 const CARD = { top: 0.1116, height: 0.3668, width: 0.2101 };

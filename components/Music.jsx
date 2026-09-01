@@ -94,7 +94,7 @@ const ROW_TOP = [0.3972, 0.4484, 0.5011];
 const COL_LEFT = [0.0798, 0.2672];
 
 // `submit` is explicit rather than inferred from a missing href: the
-// streaming links legitimately have no href until the client supplies
+// streaming links legitimately have no href until someone supplies
 // them, and inferring would have turned every unfilled platform pill into
 // a stray form submit button.
 function Pill({ children, href, filled, submit = false, style }) {

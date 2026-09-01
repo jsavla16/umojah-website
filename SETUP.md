@@ -215,6 +215,55 @@ copying begins with `re_`, you're on the API Keys page.
 
 ---
 
+## Inbound email — ImprovMX forwarding
+
+`privacy@umojahsoundsystem.com` is published in the privacy notice, so it
+has to reach a human. Resend is the wrong tool for that: it *can* receive
+mail (inbound arrived Nov 2025), but delivers it as webhooks with a 30-day
+retention and an API to fetch bodies — built for programmatic processing,
+not for reading legal correspondence.
+
+So inbound is handled by [ImprovMX](https://improvmx.com), free tier,
+forwarding to Gmail.
+
+### Records (Vercel DNS, root domain)
+
+| Name | Type | Priority | Value |
+|---|---|---|---|
+| *(blank)* | MX | 10 | `mx1.improvmx.com` |
+| *(blank)* | MX | 20 | `mx2.improvmx.com` |
+
+**Name must be genuinely blank, not `@`** — Vercel treats `@` as a literal
+hostname and the record resolves nowhere. Priority goes in its own field,
+never in the value.
+
+These are on the ROOT domain and don't conflict with the Resend bounce MX
+on `send.umojahsoundsystem.com`, which is a subdomain. Leave that alone.
+
+No SPF needed: SPF only matters for *sending* through ImprovMX, and
+forwarding works on MX alone.
+
+### Status
+
+| | |
+|---|---|
+| MX records live | yes — verified with `dig MX umojahsoundsystem.com +short` |
+| `privacy@` alias | forwards to `j.a.savla@gmail.com` and `umojahsoundsystem@gmail.com` |
+| Tested end to end | yes — arrived at both |
+| Gmail label | **still to do** — filter on To: `privacy@umojahsoundsystem.com` |
+
+### Worth knowing
+
+`bookings@umojahsoundsystem.com` is the `CONTACT_FROM` on enquiry
+notifications but has no mailbox of its own. It doesn't bite today because
+`reply_to` is set to the enquirer — but anyone who hits reply rather than
+using that header writes into a void. A catch-all alias fixes it.
+
+If the domain ever moves off Vercel's nameservers, these MX records must
+move with it or inbound mail stops silently.
+
+---
+
 ## SEO
 
 ### Where things live

@@ -7,7 +7,7 @@ import { SOCIAL, whatsappLink } from "@/lib/links";
 // Home / 1.5 Contact — "Book Umojah".
 //
 // ┌─────────────────────────────────────────────────────────────────────┐
-// │ APPEARANCE IS NOT SIGNED OFF. Agreed with the client that the       │
+// │ APPEARANCE IS NOT SIGNED OFF. Agreed that the       │
 // │ visual treatment of this section gets revisited later — the layout  │
 // │ below is functional-first, not a design decision. Behaviour (the    │
 // │ month dropdown, service preselect, form handler) is settled; the    │
