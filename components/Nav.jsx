@@ -75,9 +75,17 @@ export default function Nav() {
 
   // Close on navigation. Without this the drawer stays open over the new
   // page, because a client-side route change doesn't remount the nav.
-  useEffect(() => {
+  //
+  // Adjusted during render rather than inside an effect. React re-runs the
+  // component with the new state before it touches the DOM, so the drawer
+  // never paints open on the incoming page; an effect would show it open
+  // for a frame first. It is also what react-hooks/set-state-in-effect
+  // (new in eslint-config-next 16.3) asks for.
+  const [renderedPathname, setRenderedPathname] = useState(pathname);
+  if (pathname !== renderedPathname) {
+    setRenderedPathname(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   // Escape to close, and lock body scroll while open — otherwise the page
   // behind scrolls under the drawer, which on a phone feels broken.

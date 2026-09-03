@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { STAGE, s } from "@/lib/stage";
 import { SOCIAL, whatsappLink } from "@/lib/links";
 
@@ -63,6 +63,28 @@ function upcomingMonths() {
   });
 }
 
+// The list is read through useSyncExternalStore rather than computed in an
+// effect: the server snapshot is empty, the client snapshot is the real
+// list, and React swaps them during hydration with no setState in an
+// effect body (react-hooks/set-state-in-effect, new in
+// eslint-config-next 16.3). getMonths must return the same array on every
+// call or the store re-renders forever, hence the module-level cache.
+const NO_MONTHS = [];
+let monthsCache = null;
+
+function subscribeToNothing() {
+  return () => {};
+}
+
+function getMonths() {
+  if (monthsCache === null) monthsCache = upcomingMonths();
+  return monthsCache;
+}
+
+function getNoMonths() {
+  return NO_MONTHS;
+}
+
 const SOCIALS = [
   {
     id: "instagram",
@@ -102,7 +124,11 @@ const fieldClass =
 
 export default function Contact() {
   const [service, setService] = useState("general");
-  const [months, setMonths] = useState([]);
+  const months = useSyncExternalStore(
+    subscribeToNothing,
+    getMonths,
+    getNoMonths,
+  );
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const [error, setError] = useState("");
 
@@ -113,7 +139,6 @@ export default function Contact() {
       if (SERVICES.some((option) => option.id === id)) setService(id);
     };
     fromHash();
-    setMonths(upcomingMonths());
     window.addEventListener("hashchange", fromHash);
     return () => window.removeEventListener("hashchange", fromHash);
   }, []);
