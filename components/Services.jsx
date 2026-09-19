@@ -38,7 +38,7 @@ const PANELS = [
     title: "Sound System Hire",
     // "Corporate", not "Corporates" — the v2 artboard has the typo.
     audience: ["Corporate Events", "Weddings", "Birthdays", "Festivals", "Clubs"],
-    body: "Hire the full roots, reggae and dub experience — or just the gear. PA systems, speakers, amplifiers, DJ equipment, microphones, mixing desks, generators and power. Delivered across Kenya, from Nairobi to Mombasa, Kisumu and Nakuru, set up and tuned to the room by the people who built it.",
+    body: "Hire the full roots, reggae and dub experience, or hire just equipment. PA systems, speakers, amplifiers, DJ equipment, microphones, mixing desks, generators and power. Delivered across Kenya, from Nairobi to Mombasa, Kisumu and Nakuru, set up and tuned to the room by the people who built it.",
     bodyWidth: "90%",
     // Five audience labels instead of three, so this tag runs far wider
     // than the build panel's. Pinned per-panel rather than sized to its
@@ -83,7 +83,7 @@ const PANELS = [
     id: "build",
     title: "Build a Bespoke Sound System",
     audience: ["Restaurants", "Bars", "Audiophiles"],
-    body: "Bespoke sound, built with intention. We design, build, install and maintain systems tuned to your space — from an intimate bar to a full venue install. Consultations anywhere in Kenya: Nairobi, Mombasa, Kisumu, Nakuru. No compromises.",
+    body: "Bespoke sound, built with intention. We design, build, install and maintain systems tuned to your space. From an intimate bar to a full venue install. Consultations anywhere in Kenya: Nairobi, Mombasa, Kisumu, Nakuru. No compromises.",
     bodyWidth: "90%",
     tagWidth: 0.243,
     cta: "Start a Conversation",
@@ -148,13 +148,13 @@ function Panel({ panel }) {
           style={{ transform: `translateX(${s(centreOffset)})` }}
         >
           <h3
-          className={`font-heading absolute inset-x-0 text-center uppercase leading-none ${ink}`}
-          style={{ top: s(0.1013), fontSize: s(0.021) }}
-        >
-          {title}
-        </h3>
+            className={`font-heading absolute inset-x-0 text-center uppercase leading-none ${ink}`}
+            style={{ top: s(0.1013), fontSize: s(0.021) }}
+          >
+            {title}
+          </h3>
 
-        {/* Audience tag.
+          {/* Audience tag.
             In the mockup this is a fixed-width bar — 688/651/667px across
             the three panels, i.e. ~25.2% of page width regardless of how
             long the label is — centred in its panel. Letting it size to
@@ -163,25 +163,25 @@ function Panel({ panel }) {
             width is pinned to the stage, not the content, and the type is
             sized so the longest of the three labels still clears the
             padding. */}
-        <div
-          className="absolute inset-x-0 flex justify-center"
-          style={{ top: s(0.1347) }}
-        >
-          <span
-            className="font-body inline-flex items-center justify-center whitespace-nowrap rounded-md bg-earth font-bold uppercase tracking-[0.04em] text-bone"
-            style={{
-              width: s(tagWidth),
-              height: s(0.0187),
-              fontSize: s(0.0102),
-              paddingLeft: s(0.008),
-              paddingRight: s(0.008),
-            }}
+          <div
+            className="absolute inset-x-0 flex justify-center"
+            style={{ top: s(0.1347) }}
           >
-            {audience.join(" ● ")}
-          </span>
-        </div>
+            <span
+              className="font-body inline-flex items-center justify-center whitespace-nowrap rounded-md bg-earth font-bold uppercase tracking-[0.04em] text-bone"
+              style={{
+                width: s(tagWidth),
+                height: s(0.0187),
+                fontSize: s(0.0102),
+                paddingLeft: s(0.008),
+                paddingRight: s(0.008),
+              }}
+            >
+              {audience.join(" ● ")}
+            </span>
+          </div>
 
-        {/* THE BODY HAS A HEIGHT BUDGET. Read this before editing copy.
+          {/* THE BODY HAS A HEIGHT BUDGET. Read this before editing copy.
 
             Everything in this panel is absolutely positioned, so the
             paragraph cannot push the artwork down — it just runs behind
@@ -207,12 +207,12 @@ function Panel({ panel }) {
             So: if the copy grows past roughly 290 characters, this size
             has to come down again, or the artwork has to move. Don't just
             add a sentence and assume it fits. */}
-        <p
-          className={`font-body absolute left-1/2 -translate-x-1/2 text-center font-normal leading-[1.45] ${ink}`}
-          style={{ top: s(0.1647), width: bodyWidth, fontSize: s(0.0124) }}
-        >
-          {body}
-        </p>
+          <p
+            className={`font-body absolute left-1/2 -translate-x-1/2 text-center font-normal leading-[1.45] ${ink}`}
+            style={{ top: s(0.1647), width: bodyWidth, fontSize: s(0.0124) }}
+          >
+            {body}
+          </p>
 
         </div>
 
@@ -244,11 +244,10 @@ function Panel({ panel }) {
         >
           <a
             href={ctaHref}
-            className={`font-display inline-flex items-center justify-center whitespace-nowrap rounded-md border-2 border-earth uppercase tracking-[0.08em] transition-colors ${
-              dark
-                ? "bg-earth text-bone hover:bg-black"
-                : "bg-bone text-earth hover:bg-sand"
-            }`}
+            className={`font-display inline-flex items-center justify-center whitespace-nowrap rounded-md border-2 border-earth uppercase tracking-[0.08em] transition-colors ${dark
+              ? "bg-earth text-bone hover:bg-black"
+              : "bg-bone text-earth hover:bg-sand"
+              }`}
             style={{
               height: s(0.027),
               fontSize: s(0.0163),
@@ -290,9 +289,8 @@ function MobileService({ panel, showEyebrow }) {
 
   return (
     <div
-      className={`paper px-5 pb-10 pt-8 ${
-        mobileDark ? "bg-terracotta" : "bg-bone"
-      }`}
+      className={`paper px-5 pb-10 pt-8 ${mobileDark ? "bg-terracotta" : "bg-bone"
+        }`}
     >
       {showEyebrow && (
         <p

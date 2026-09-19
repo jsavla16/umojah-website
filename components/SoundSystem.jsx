@@ -21,7 +21,7 @@ const MOBILE_STACK = ABOUT_MOBILE.stack;
 
 const PARAGRAPHS = [
   "The first stack was completed in early 2016 after years of planning, sourcing and hand-building every speaker box.",
-  "The system today is a purpose-built instrument — each cabinet tuned, loaded and positioned to create a specific physical experience. Sub-bass you feel through your body - mids that kick and carry across crisp vocals and - tops that cut through without harshness.",
+  "The system today is a purpose-built instrument; each cabinet tuned, loaded and positioned to create a specific physical experience. Sub-bass you feel through your body. Mid range that kicks and carries across crisp vocals and tops that cut through without harshness.",
   "Every cabinet was constructed, loaded and tuned in Kenya.",
 ];
 

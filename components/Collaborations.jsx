@@ -76,6 +76,8 @@ const ARTISTS = [
   "10000 Lions",
   "Long Fingah",
   "Mungos Hi-Fi",
+  "Asili Dub",
+  "Rhythm Station",
   "Charlie P",
   "Cian Finn",
   "Kelissa",

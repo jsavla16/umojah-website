@@ -73,7 +73,7 @@ const NO_MONTHS = [];
 let monthsCache = null;
 
 function subscribeToNothing() {
-  return () => {};
+  return () => { };
 }
 
 function getMonths() {
@@ -253,7 +253,7 @@ export default function Contact() {
           style={{ top: s(0.088) }}
         >
           Festivals &middot; Club nights &middot; Residencies &middot; Custom
-          builds &middot; Private events &mdash; across East Africa and beyond.
+          builds &middot; Private events; Across East Africa and beyond.
         </p>
 
         <form
@@ -386,7 +386,7 @@ export default function Contact() {
             {whatsappLink() && (
               <a
                 href={whatsappLink(
-                  "Hi Umojah — I'd like to talk about an enquiry from your website.",
+                  "Hi Umojah - I'd like to talk about an enquiry from your website.",
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
